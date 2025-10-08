@@ -1,6 +1,14 @@
 import { model, Schema } from "mongoose";
 
 const userSchema = new Schema({
+    bannerImage: {
+        type: String,
+        default: "banner"
+    },
+    profilePic: {
+        type: String,
+        default: "profile"
+    },
     fullName: {
         type: String,
         required: true,

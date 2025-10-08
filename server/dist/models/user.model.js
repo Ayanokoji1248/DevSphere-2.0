@@ -2,6 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const userSchema = new mongoose_1.Schema({
+    bannerImage: {
+        type: String,
+        default: "banner"
+    },
+    profilePic: {
+        type: String,
+        default: "profile"
+    },
     fullName: {
         type: String,
         required: true,
