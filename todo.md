@@ -1,7 +1,9 @@
 # My To-Do List
 
 ## 💻 Backend
-- [ ] Start server using express
-- [ ] Create user model and make proper schema
-- [ ] Create auth routes for register and login
-
+- [X] Start server using express
+- [X] Create user model and make proper schema
+- [X] Create auth routes for register and login and logout
+- [ ] Create post routes CRUD
+- [ ] Init React with login/register
+- [ ] add zustand for user
