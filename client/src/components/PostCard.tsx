@@ -1,61 +1,107 @@
-import { Ellipsis, Heart, MessageCircle } from "lucide-react"
+import { Ellipsis, Heart, MessageCircle } from "lucide-react";
 
 const PostCard = () => {
+    const post = {
+        user: {
+            name: "Krish Prajapati",
+            username: "crish1248",
+            avatar:
+                "https://i.pinimg.com/1200x/00/80/fc/0080fcbb036ac608f882c656509ea355.jpg",
+        },
+        text: "Just finished working on my new full-stack project using React, Node.js, and MongoDB! 🚀 Super proud of the result!",
+        image:
+            "https://i.pinimg.com/1200x/3e/11/7a/3e117a1ab14736aa913ee9375c26d7fd.jpg",
+        link: "https://github.com/krish1248/devsphere",
+        code: `const greet = (name: string) => console.log(\`Hello, \${name}!\`);
+greet("World");`,
+        tags: ["React", "NodeJS", "MERN", "DevSphere"],
+        likes: 128,
+        comments: 42,
+    };
+
     return (
-        <div className="w-full bg-zinc-950 text-white rounded-xl border border-zinc-700 p-4 flex flex-col gap-3">
+        <div className="w-full bg-black text-white border-y border-zinc-800 p-6 flex flex-col gap-4 rounded-lg hover:bg-[#090909] cursor-pointer transition-all duration-300">
 
             {/* Header */}
             <div className="flex justify-between items-start">
                 <div className="flex gap-3">
                     <img
                         className="w-12 h-12 rounded-full object-cover"
-                        src="https://i.pinimg.com/1200x/00/80/fc/0080fcbb036ac608f882c656509ea355.jpg"
+                        src={post.user.avatar}
                         alt="profile"
                     />
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2 flex-wrap">
-                            <h1 className="font-medium">Krish Prajapati</h1>
-                            <p className="text-sm text-zinc-500 leading-0">@crish1248</p>
+                            <h1 className="font-medium">{post.user.name}</h1>
+                            <p className="text-sm text-zinc-500">@{post.user.username}</p>
                         </div>
                     </div>
                 </div>
-                <div className="hover:bg-zinc-900 transition-all duration-300 p-2 rounded-full ">
+                <div className="hover:bg-zinc-900 p-2 rounded-full transition">
                     <Ellipsis className="text-zinc-400 cursor-pointer" />
                 </div>
             </div>
 
-            {/* Post Text */}
-            <div className="text-sm text-white">
-                Just finished working on my new project! 🚀 #WebDevelopment #React
-            </div>
+            {/* Post Text (compulsory) */}
+            <p className="text-sm leading-relaxed text-zinc-100">{post.text}</p>
 
-            {/* Post Image */}
-            <div className="w-full h-60 bg-zinc-800 rounded-xl overflow-hidden">
-                <img
-                    src="https://i.pinimg.com/originals/00/80/fc/0080fcbb036ac608f882c656509ea355.jpg"
-                    alt="post"
-                    className="w-full h-full object-cover"
-                />
-            </div>
+            {/* Link (optional) */}
+            {post.link && (
+                <a
+                    href={post.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block border border-blue-700 rounded-lg p-4 font-medium outline-none bg-blue-950/50"
+                >
+                    <p className="text-md text-blue-500 truncate">{post.link}</p>
+                </a>
+            )}
 
-            <div className="flex flex-wrap gap-3">
-                <span className="text-sm font-medium bg-zinc-800 px-2 py-1 rounded-md text-zinc-300"># React</span>
-                <span className="text-sm font-medium bg-zinc-800 px-2 py-1 rounded-md text-zinc-300"># React</span>
-            </div>
+            {/* Code (optional) */}
+            {post.code && (
+                <pre className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm font-mono text-zinc-200 overflow-x-auto">
+                    <code className="text-emerald-500">{post.code}</code>
+                </pre>
+            )}
+
+            {/* Image (optional) */}
+            {post.image && (
+                <div className="w-full min-h-72 bg-zinc-800 rounded-xl overflow-hidden">
+                    <img
+                        src={post.image}
+                        alt="post"
+                        className="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-300"
+                    />
+                </div>
+            )}
+
+            {/* Tags */}
+            {post.tags && post.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                    {post.tags.map((tag, i) => (
+                        <span
+                            key={i}
+                            className="text-xs font-medium bg-zinc-800 px-2 py-1 rounded-md text-zinc-300"
+                        >
+                            #{tag}
+                        </span>
+                    ))}
+                </div>
+            )}
 
             {/* Actions */}
-            <div className="flex flex-wrap sm:flex-nowrap gap-4 text-zinc-400 mt-2">
-                <div className="flex items-center gap-2 cursor-pointer hover:text-red-500">
+            <div className="flex gap-6 text-zinc-400 mt-2">
+                <div className="flex items-center gap-2 cursor-pointer hover:text-red-500 transition">
                     <Heart size={18} />
-                    <span className="text-sm">45</span>
+                    <span className="text-sm">{post.likes}</span>
                 </div>
-                <div className="flex items-center gap-2 cursor-pointer hover:text-blue-500">
+                <div className="flex items-center gap-2 cursor-pointer hover:text-blue-500 transition">
                     <MessageCircle size={18} />
-                    <span className="text-sm">12</span>
+                    <span className="text-sm">{post.comments}</span>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default PostCard
+export default PostCard;

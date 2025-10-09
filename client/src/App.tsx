@@ -3,6 +3,8 @@ import RegisterPage from './pages/RegisterPage'
 import AuthLayout from './layouts/AuthLayout'
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
+import ProfilePage from './pages/ProfilePage'
+import MainLayout from './layouts/MainLayout'
 
 const App = () => {
   return (
@@ -12,7 +14,10 @@ const App = () => {
         <Route path='/login' element={<LoginPage />} />
       </Route>
 
-      <Route path='/home' element={<HomePage />} />
+      <Route element={<MainLayout />} >
+        <Route path='/home' element={<HomePage />} />
+        <Route path='/profile' element={<ProfilePage />} />
+      </Route>
 
     </Routes>
   )
