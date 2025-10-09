@@ -1,81 +1,111 @@
-import { Code, Ellipsis, FolderCode, Globe, HomeIcon, Search, User } from "lucide-react";
+import {
+    Code,
+    Ellipsis,
+    FolderCode,
+    Globe,
+    HomeIcon,
+    LogOut,
+    Search,
+    User,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const Sidebar = () => {
-    return (
-        <div className="w-full md:w-[20%] h-screen border-b md:border-b-0 md:border-r border-zinc-600 flex flex-col justify-between items-center px-2 py-4 md:py-6 xl:sticky top-0">
+    const [logoutMenu, setLogoutMenu] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+                setLogoutMenu(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <div className="w-full md:w-[20%] h-screen border-b md:border-b-0 md:border-r border-zinc-600 flex flex-col justify-between items-center px-2 py-4 md:py-6 xl:sticky top-0 bg-black">
+            {/* Top Section */}
             <div className="flex flex-col justify-center gap-10 px-4 w-full">
+                {/* Logo */}
                 <div className="flex items-center gap-3">
                     <Globe size={32} className="text-white" />
                     <div>
                         <h1 className="text-white font-bold font-[Albert_Sans] text-xl md:text-2xl">
                             DevSphere
                         </h1>
-                        <p className="text-xs text-zinc-100 font-medium">
+                        <p className="text-xs text-zinc-400 font-medium">
                             Connect • Code • Create
                         </p>
                     </div>
                 </div>
 
+                {/* Navigation */}
                 <div className="flex flex-col gap-1 w-full">
-
-                    <div className="">
-                        <div className="flex items-center justify-start p-3 px-5 gap-5 hover:bg-zinc-900 rounded-full transition-all duration-300 cursor-pointer w-fit">
-                            <HomeIcon />
-                            <h2 className="text-xl font-semibold">Home</h2>
+                    {[
+                        { icon: <HomeIcon />, label: "Home" },
+                        { icon: <Search />, label: "Explore" },
+                        { icon: <FolderCode />, label: "Projects" },
+                        { icon: <Code />, label: "Code Review" },
+                        { icon: <User />, label: "Profile" },
+                    ].map((item, index) => (
+                        <div
+                            key={index}
+                            className="flex items-center justify-start p-3 px-5 gap-5 hover:bg-zinc-900 rounded-full transition-all duration-300 cursor-pointer w-fit"
+                        >
+                            {item.icon}
+                            <h2 className="text-xl font-semibold">{item.label}</h2>
                         </div>
-                    </div>
+                    ))}
 
-                    <div className="">
-                        <div className="flex items-center justify-start p-3 px-5 gap-5 hover:bg-zinc-900 rounded-full transition-all duration-300 cursor-pointer w-fit">
-                            <Search />
-                            <h2 className="text-xl font-semibold">Explore</h2>
-                        </div>
-                    </div>
-
-                    <div className="w-full">
-                        <div className="flex items-center justify-start p-3 px-5 gap-5 hover:bg-zinc-900 w-fit rounded-full transition-all duration-300 cursor-pointer">
-                            <FolderCode />
-                            <h2 className="text-xl font-semibold">Projects</h2>
-                        </div>
-                    </div>
-
-                    <div className="w-full">
-                        <div className="flex items-center justify-start p-3 px-5 gap-5 hover:bg-zinc-900 w-fit rounded-full transition-all duration-300 cursor-pointer">
-                            <Code />
-                            <h2 className="text-xl font-semibold">Code Review</h2>
-                        </div>
-                    </div>
-
-                    <div className="w-full">
-                        <div className="flex items-center justify-start p-3 px-5 gap-5 hover:bg-zinc-900 w-fit rounded-full transition-all duration-300 cursor-pointer">
-                            <User />
-                            <h2 className="text-xl font-semibold">Profile</h2>
-                        </div>
-                    </div>
-
-                    <div className="w-full">
-                        <button className="w-full p-3 bg-violet-600 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-violet-700 cursor-pointer mt-3">Post</button>
-                    </div>
-
+                    {/* Post Button */}
+                    <button className="w-full p-3 bg-violet-600 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-violet-700 cursor-pointer mt-3">
+                        Post
+                    </button>
                 </div>
             </div>
 
-            <div className="w-full p-3 hover:bg-zinc-900 rounded-full cursor-pointer transition-all duration-300 flex justify-between items-center">
-                <div className="flex items-center gap-3">
-
-                    <img className="w-12 h-12 rounded-full" src="https://i.pinimg.com/1200x/00/80/fc/0080fcbb036ac608f882c656509ea355.jpg" alt="" />
-                    <div className="flex flex-col">
-                        <h1 className="font-semibold">Krish Prajapati</h1>
-                        <p className="text-sm text-zinc-600 font-medium">@crish</p>
+            {/* Profile Section */}
+            <div ref={menuRef} className="relative w-full">
+                <button
+                    onClick={() => setLogoutMenu(!logoutMenu)}
+                    className="w-full p-3 hover:bg-zinc-900 rounded-full cursor-pointer transition-all duration-300 flex justify-between items-center"
+                >
+                    <div className="flex items-center gap-3">
+                        <img
+                            className="w-12 h-12 rounded-full"
+                            src="https://i.pinimg.com/1200x/00/80/fc/0080fcbb036ac608f882c656509ea355.jpg"
+                            alt="profile"
+                        />
+                        <div className="flex flex-col text-left">
+                            <h1 className="font-semibold text-white">Krish Prajapati</h1>
+                            <p className="text-sm text-zinc-500 font-medium">@crish</p>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <Ellipsis size={20} />
-                </div>
+                    <Ellipsis size={20} className="text-zinc-400" />
+                </button>
+
+                {/* Logout Dropdown */}
+                {logoutMenu && (
+                    <div
+                        className="absolute bottom-[80px] left-0 w-full bg-zinc-950 border border-zinc-700 
+                       p-3 rounded-md animate-fadeIn z-50 shadow-lg"
+                    >
+                        <button
+                            onClick={() => setLogoutMenu(false)}
+                            className="text-red-500 font-medium hover:text-red-600 transition w-full flex items-center justify-between cursor-pointer"
+                        >
+                            Logout
+
+                            <LogOut size={20} />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Sidebar
+export default Sidebar;

@@ -12,7 +12,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
     return createPortal(
         <div className="w-full min-h-screen bg-zinc-950/70 fixed inset-0 z-[99999] flex justify-center items-center">
 
-            <div className='w-[500px] max-h-[600px] bg-zinc-950 shadow-zinc-800 shadow-[2px_2px_15px_5px] rounded-xl text-white scrollbar scrollbar-thumb-white scrollbar-thin scrollbar-track-zinc-950 overflow-y-scroll'>
+            <div className='w-[500px] max-h-[600px] bg-zinc-950 shadow-zinc-800 shadow-[2px_2px_15px_5px] rounded-xl text-white scrollbar-thumb-white scrollbar-thin scrollbar-track-zinc-950 overflow-y-scroll'>
 
                 {/* Modal Header */}
                 <div className="p-4 px-5 flex items-center justify-between sticky top-0 z-10 bg-black">

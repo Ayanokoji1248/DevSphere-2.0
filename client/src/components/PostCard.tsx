@@ -1,6 +1,10 @@
+import { useState, useRef, useEffect } from "react";
 import { Ellipsis, Heart, MessageCircle } from "lucide-react";
 
 const PostCard = () => {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
     const post = {
         user: {
             name: "Krish Prajapati",
@@ -17,6 +21,27 @@ greet("World");`,
         tags: ["React", "NodeJS", "MERN", "DevSphere"],
         likes: 128,
         comments: 42,
+    };
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+                setMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const handleEdit = () => {
+        alert("Edit clicked!");
+        setMenuOpen(false);
+    };
+
+    const handleDelete = () => {
+        alert("Delete clicked!");
+        setMenuOpen(false);
     };
 
     return (
@@ -37,15 +62,39 @@ greet("World");`,
                         </div>
                     </div>
                 </div>
-                <div className="hover:bg-zinc-900 p-2 rounded-full transition">
-                    <Ellipsis className="text-zinc-400 cursor-pointer" />
+
+                {/* Ellipsis button */}
+                <div className="relative" ref={menuRef}>
+                    <button
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className="hover:bg-zinc-900 p-2 rounded-full transition"
+                    >
+                        <Ellipsis className="text-zinc-400 cursor-pointer" />
+                    </button>
+
+                    {menuOpen && (
+                        <div className="flex flex-col items-start bg-zinc-900 rounded-md absolute -left-12 top-10 z-50 border border-zinc-700 shadow-[0.5px_0.5px_1px_1px] shadow-zinc-800">
+                            <button
+                                onClick={handleEdit}
+                                className="text-sm font-semibold px-5 py-1 w-full cursor-pointer hover:text-blue-500 hover:bg-zinc-800 overflow-auto transition-all duration-300 "
+                            >
+                                Edit
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                className="text-sm font-semibold w-full px-5 py-1 cursor-pointer text-red-500 hover:text-red-400 hover:bg-zinc-800  transition-all duration-300"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* Post Text (compulsory) */}
+            {/* Post Text */}
             <p className="text-sm leading-relaxed text-zinc-100">{post.text}</p>
 
-            {/* Link (optional) */}
+            {/* Link */}
             {post.link && (
                 <a
                     href={post.link}
@@ -57,14 +106,14 @@ greet("World");`,
                 </a>
             )}
 
-            {/* Code (optional) */}
+            {/* Code */}
             {post.code && (
                 <pre className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm font-mono text-zinc-200 overflow-x-auto">
                     <code className="text-emerald-500">{post.code}</code>
                 </pre>
             )}
 
-            {/* Image (optional) */}
+            {/* Image */}
             {post.image && (
                 <div className="w-full min-h-72 bg-zinc-800 rounded-xl overflow-hidden">
                     <img
