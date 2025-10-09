@@ -1,18 +1,23 @@
 import { Edit, X, Plus } from "lucide-react";
 import { createPortal } from "react-dom";
 
-const EditProfileModal = () => {
-    const root = document.getElementById("root") as HTMLElement;
+interface modalProp {
+    setModal: (modal: boolean) => void
+}
+
+const EditProfileModal = ({ setModal }: modalProp) => {
+
+    const root = document.getElementById("main") as HTMLElement;
 
     return createPortal(
-        <div className="w-full min-h-screen bg-zinc-950/70 fixed z-10 flex justify-center items-center">
+        <div className="w-full min-h-screen bg-zinc-950/70 fixed inset-0 z-[99999] flex justify-center items-center">
 
-            <div className='w-[500px] max-h-[600px] overflow-y-auto bg-zinc-950 shadow-zinc-800 shadow-[2px_2px_15px_5px] rounded-xl text-white'>
+            <div className='w-[500px] max-h-[600px] bg-zinc-950 shadow-zinc-800 shadow-[2px_2px_15px_5px] rounded-xl text-white scrollbar scrollbar-thumb-white scrollbar-thin scrollbar-track-zinc-950 overflow-y-scroll'>
 
                 {/* Modal Header */}
                 <div className="p-4 px-5 flex items-center justify-between sticky top-0 z-10 bg-black">
                     <div className="flex items-center gap-2">
-                        <button className="p-1 hover:bg-zinc-800 transition-all duration-300 cursor-pointer rounded-full">
+                        <button onClick={() => setModal(false)} className="p-1 hover:bg-zinc-800 transition-all duration-300 cursor-pointer rounded-full">
                             <X size={22} />
                         </button>
                         <h1 className="text-xl font-semibold">Edit Profile</h1>

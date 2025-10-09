@@ -4,8 +4,8 @@ import Sidebar from "../components/Sidebar"
 
 const MainLayout = () => {
     return (
-        <div className="bg-zinc-950" id="root">
-            <div className="w-full min-h-screen bg-zinc-950 text-white flex flex-col md:flex-row max-w-7xl mx-auto relative">
+        <div className="bg-zinc-950 relative w-full" id="main">
+            <div className="w-full min-h-screen bg-zinc-950 text-white flex flex-col md:flex-row max-w-7xl mx-auto relative" >
                 {/* Sidebar */}
                 <Sidebar />
 

@@ -5,6 +5,8 @@ import EditProfileModal from "../components/EditProfileModal";
 const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState("Posts");
 
+    const [modal, setModal] = useState(false)
+
     // Mock user data
     const user = {
         fullName: "Krish Prajapati",
@@ -32,13 +34,11 @@ const ProfilePage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-zinc-950 text-white font-[Albert_Sans]">
+        <div className="min-h-screen bg-zinc-950 text-white">
 
-            {/* <div className="absolute z-10 w-full h-screen bg-blue-500">
-            </div> */}
-                <EditProfileModal />
-            {/* <div className="absolute">
-            </div> */}
+            {/* {modal ? <EditProfileModal /> : <p>No modal</p>} */}
+            {modal && <EditProfileModal setModal={setModal} />}
+
 
             {/* Cover */}
             <div className="h-48 md:h-64 w-full relative">
@@ -67,7 +67,10 @@ const ProfilePage = () => {
                         <p className="text-zinc-500 text-sm">@{user.username}</p>
                     </div>
 
-                    <button className="bg-black hover:bg-zinc-900 border border-zinc-600 px-4 py-2 rounded-full text-sm font-medium transition duration-300 cursor-pointer">
+                    <button onClick={() => {
+                        console.log("Click");
+                        setModal(!modal)
+                    }} className="bg-black hover:bg-zinc-900 border border-zinc-600 px-4 py-2 rounded-full text-sm font-medium transition duration-300 cursor-pointer">
                         Edit Profile
                     </button>
                 </div>
