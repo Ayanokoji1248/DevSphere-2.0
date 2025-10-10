@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPost = void 0;
+exports.allPosts = exports.createPost = void 0;
 const post_model_1 = __importDefault(require("../models/post.model"));
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -40,3 +40,21 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createPost = createPost;
+const allPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const posts = yield post_model_1.default.find({}).populate("user", "_id fullName username profilePic");
+        res.status(200).json({
+            message: "All Posts",
+            posts
+        });
+        return;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+        return;
+    }
+});
+exports.allPosts = allPosts;

@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import ProfilePage from './pages/ProfilePage'
 import MainLayout from './layouts/MainLayout'
+import ProtectedRoute from './components/ProtectedRoute'
 
 const App = () => {
   return (
@@ -14,9 +15,11 @@ const App = () => {
         <Route path='/login' element={<LoginPage />} />
       </Route>
 
-      <Route element={<MainLayout />} >
-        <Route path='/home' element={<HomePage />} />
-        <Route path='/profile' element={<ProfilePage />} />
+      <Route element={<ProtectedRoute />} >
+        <Route element={<MainLayout />} >
+          <Route path='/home' element={<HomePage />} />
+          <Route path='/profile' element={<ProfilePage />} />
+        </Route>
       </Route>
 
     </Routes>

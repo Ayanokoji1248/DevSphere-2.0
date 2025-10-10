@@ -1,7 +1,9 @@
 import { Code, Image, Link } from "lucide-react";
 import PostCard from "../components/PostCard";
+import usePostStore from "../stores/postStore";
 
 const HomePage = () => {
+    const { posts } = usePostStore()
     return (
         <div className="">
             {/* Create Post */}
@@ -46,8 +48,19 @@ const HomePage = () => {
 
             {/* Posts */}
             <div className="mt-3 flex flex-col">
-                <PostCard />
-                <PostCard />
+                {posts.map((post) => (
+                    <PostCard
+                        key={post._id}
+                        text={post.text}
+                        imageUrl={post.imageUrl}
+                        code={post.code}
+                        link={post.link}
+                        user={post.user}
+                        likes={post.likes}
+                    />
+                ))}
+                {/* <PostCard />
+                <PostCard /> */}
             </div>
         </div>
     );

@@ -2,6 +2,7 @@ import axios, { isAxiosError } from "axios";
 import { create } from "zustand";
 import { BACKEND_URL } from "../utils";
 import useUserStore from "./userStore";
+import usePostStore from "./postStore";
 
 type authState = {
     isAuthenticated: boolean,
@@ -22,6 +23,7 @@ const useAuthStore = create<authState>((set) => ({
 
             console.log(response.data)
             useUserStore.getState().setUser(response.data.user);
+            usePostStore.getState().fetechAllPost()
             set({ isAuthenticated: true })
 
         } catch (error) {

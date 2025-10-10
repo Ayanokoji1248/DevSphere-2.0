@@ -29,3 +29,21 @@ export const createPost = async (req: Request, res: Response) => {
     }
 }
 
+export const allPosts = async (req: Request, res: Response) => {
+    try {
+        const posts = await Post.find({}).populate("user", "_id fullName username profilePic");
+
+        res.status(200).json({
+            message: "All Posts",
+            posts
+        })
+        return
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+        return
+    }
+}
