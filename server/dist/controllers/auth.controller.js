@@ -27,9 +27,32 @@ exports.logout = exports.userLogin = exports.userRegister = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const generateToken_1 = require("../utils/generateToken");
+const zod_1 = require("zod");
+const userRegisterSchema = zod_1.z.object({
+    fullName: zod_1.z.string().min(5, "Atleast 5 character required"),
+    username: zod_1.z.string().min(5, "Atleast 5 character required"),
+    email: zod_1.z.email("Invalid Email"),
+    password: zod_1.z.string().min(5, "Atleast 5 character"),
+});
+const userLoginSchema = userRegisterSchema.pick({
+    email: true,
+    password: true
+});
 const userRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { fullName, username, email, password } = req.body;
+        const validation = userRegisterSchema.safeParse({ fullName, username, email, password });
+        if (!validation.success) {
+            const issues = validation.error.issues.map((err) => ({
+                field: err.path[0],
+                message: err.message
+            }));
+            res.status(400).json({
+                message: "Validation Error",
+                error: issues
+            });
+            return;
+        }
         const userExist = yield user_model_1.default.findOne({ email });
         if (userExist) {
             res.status(400).json({
@@ -69,6 +92,20 @@ exports.userRegister = userRegister;
 const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
+        const validation = userLoginSchema.safeParse({
+            email, password
+        });
+        if (!validation.success) {
+            const issues = validation.error.issues.map((err) => ({
+                field: err.path[0],
+                message: err.message
+            }));
+            res.status(400).json({
+                message: "Validation Error",
+                error: issues
+            });
+            return;
+        }
         const user = yield user_model_1.default.findOne({ email });
         if (!user) {
             res.status(400).json({

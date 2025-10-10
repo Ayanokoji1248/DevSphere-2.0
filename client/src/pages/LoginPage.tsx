@@ -2,6 +2,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState, type FormEvent } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 import useAuthStore from "../stores/authStore";
+import { userLoginSchema } from "../utils/zod_schema";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -12,12 +14,38 @@ const LoginPage = () => {
 
     const [passwordShow, setPasswordShow] = useState(false);
 
+    const [error, setError] = useState<{ email?: string, password?: string }>({});
+
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault()
-        await login(email, password);
-        setEmail("");
-        setPassword("");
-        navigate('/home')
+
+        const validation = userLoginSchema.safeParse({
+            email, password
+        })
+
+        if (!validation.success) {
+            const newErrors: Record<string, string> = {};
+            validation.error.issues.forEach((issue) => {
+                const field = String(issue.path[0]);
+                newErrors[field] = issue.message;
+            })
+
+            setError(newErrors)
+            return
+        }
+        try {
+            await login(email, password);
+            navigate('/home')
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : "Login Failed", {
+                duration: 1000
+            });
+        }
+        finally {
+            setEmail("");
+            setPassword("");
+        }
+
     }
 
     return (
@@ -42,6 +70,7 @@ const LoginPage = () => {
                             className="p-2 outline-none border-[1px] border-zinc-600 rounded-md focus:ring-2 focus:ring-white transition-all duration-300"
                             placeholder="john12@gmail.com"
                         />
+                        {error.email && <p className="text-sm text-red-500 font-medium">Invalid Email</p>}
                     </div>
 
                     <div className="flex flex-col gap-2">
@@ -51,7 +80,12 @@ const LoginPage = () => {
                         <div className="w-full flex items-center border-[1px] border-zinc-600 rounded-md focus-within:ring-2 focus-within:ring-white transition-all duration-300 pr-3">
                             <input
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => {
+                                    setPassword(e.target.value)
+                                    error.password = ""
+                                }
+
+                                }
                                 name="password"
                                 type={passwordShow ? "text" : "password"}
                                 className="w-full p-2 outline-none "
@@ -59,14 +93,15 @@ const LoginPage = () => {
                             />
                             {
                                 passwordShow ?
-                                    <EyeOff className="cursor-pointer hover:text-zinc-500 transition-all duration-300" onClick={() => setPasswordShow(!passwordShow)} />
-                                    :
                                     <Eye className="cursor-pointer hover:text-zinc-500 transition-all duration-300" onClick={() => setPasswordShow(!passwordShow)} />
+                                    :
+                                    <EyeOff className="cursor-pointer hover:text-zinc-500 transition-all duration-300" onClick={() => setPasswordShow(!passwordShow)} />
                             }
                         </div>
+                        {error.password && <p className="text-xs text-red-500 font-medium">{error.password}</p>}
                     </div>
 
-                    <button className="bg-white mt-2 text-black p-2 rounded-md font-medium cursor-pointer hover:bg-zinc-200 transition-all duration-300">Login</button>
+                    <button className="bg-white text-black mt-2 p-2 rounded-md font-medium cursor-pointer hover:bg-zinc-200 transition-all duration-300">Login</button>
 
                     <p className="text-sm">
                         Don't have an account?{" "}

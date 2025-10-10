@@ -2,11 +2,38 @@ import { Request, Response } from "express"
 import User from "../models/user.model";
 import bcrypt from "bcrypt"
 import { generateToken } from "../utils/generateToken";
+import { z } from "zod"
+
+const userRegisterSchema = z.object({
+    fullName: z.string().min(5, "Atleast 5 character required"),
+    username: z.string().min(5, "Atleast 5 character required"),
+    email: z.email("Invalid Email"),
+    password: z.string().min(5, "Atleast 5 character"),
+})
+
+const userLoginSchema = userRegisterSchema.pick({
+    email: true,
+    password: true
+})
 
 export const userRegister = async (req: Request, res: Response) => {
     try {
 
         const { fullName, username, email, password } = req.body;
+
+        const validation = userRegisterSchema.safeParse({ fullName, username, email, password });
+
+        if (!validation.success) {
+            const issues = validation.error.issues.map((err) => ({
+                field: err.path[0],
+                message: err.message
+            }))
+            res.status(400).json({
+                message: "Validation Error",
+                error: issues
+            })
+            return
+        }
 
         const userExist = await User.findOne({ email });
 
@@ -54,6 +81,22 @@ export const userRegister = async (req: Request, res: Response) => {
 export const userLogin = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
+
+        const validation = userLoginSchema.safeParse({
+            email, password
+        })
+
+        if (!validation.success) {
+            const issues = validation.error.issues.map((err) => ({
+                field: err.path[0],
+                message: err.message
+            }))
+            res.status(400).json({
+                message: "Validation Error",
+                error: issues
+            })
+            return
+        }
 
         const user = await User.findOne({ email });
 

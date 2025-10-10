@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { create } from "zustand";
 import { BACKEND_URL } from "../utils";
 import useUserStore from "./userStore";
@@ -26,6 +26,12 @@ const useAuthStore = create<authState>((set) => ({
 
         } catch (error) {
             console.error(error);
+            if (isAxiosError(error)) {
+                throw new Error(error.response?.data.message || "Login Failed")
+            }
+            else {
+                throw new Error("Error in Login")
+            }
         }
     },
     register: async (fullName, username, email, password) => {
@@ -43,6 +49,11 @@ const useAuthStore = create<authState>((set) => ({
 
         } catch (error) {
             console.error(error);
+            if (isAxiosError(error)) {
+                throw new Error(error.response?.data.message || "Login Failed")
+            } else {
+                throw new Error("Error in Registeration")
+            }
         }
     },
     logout: async () => {

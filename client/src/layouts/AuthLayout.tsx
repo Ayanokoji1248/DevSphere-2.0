@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
 import { CodeXml, Globe, Star, Users, Zap } from 'lucide-react';
 import type { ReactNode } from "react";
+import { Toaster } from "react-hot-toast";
 
 const AuthLayout = () => {
     return (
         <div className="auth-layout w-full min-h-screen bg-zinc-950 text-white flex font-[Satoshi] flex-col lg:flex-row">
-
+            <Toaster />
             <div className="w-full min-h-screen bg-[linear-gradient(-20deg,#b721ff_0%,#21d4fd_100%)] lg:w-[50%] p-12 px-5 sm:px-15 flex flex-col lg:px-12 xl:px-20">
                 <div className="flex items-center gap-3">
                     <Globe size={65} className="text-white" />
