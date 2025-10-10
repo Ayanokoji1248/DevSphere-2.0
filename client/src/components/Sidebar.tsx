@@ -26,7 +26,7 @@ const Sidebar = () => {
     }, []);
 
     return (
-        <div className="w-full md:w-[20%] h-screen border-b md:border-b-0 md:border-r border-zinc-600 flex flex-col justify-between items-center px-2 py-4 md:py-6 xl:sticky top-0 bg-black">
+        <div className="hidden md:flex w-full md:w-[20%] h-screen border-b md:border-b-0 md:border-r border-zinc-600  flex-col justify-between items-center px-2 py-4 md:py-6 sticky top-0 bg-black">
             {/* Top Section */}
             <div className="flex flex-col justify-center gap-10 px-4 w-full">
                 {/* Logo */}

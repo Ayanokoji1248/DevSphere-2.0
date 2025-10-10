@@ -108,7 +108,7 @@ greet("World");`,
 
             {/* Code */}
             {post.code && (
-                <pre className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm font-mono text-zinc-200 overflow-x-auto">
+                <pre className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm font-mono text-zinc-200 whitespace-pre-wrap break-words">
                     <code className="text-emerald-500">{post.code}</code>
                 </pre>
             )}
