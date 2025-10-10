@@ -1,8 +1,11 @@
 import { Outlet } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
+import useUserStore from "../stores/userStore"
 
 
 const MainLayout = () => {
+    const { user } = useUserStore()
+
     return (
         <div className="bg-zinc-950 relative w-full" id="main">
             <div className="w-full min-h-screen bg-zinc-950 text-white flex flex-col md:flex-row max-w-7xl mx-auto relative" >
@@ -25,8 +28,8 @@ const MainLayout = () => {
                                 alt="profile"
                                 className="w-20 h-20 rounded-full object-cover"
                             />
-                            <h2 className="text-white font-semibold text-lg">Krish Prajapati</h2>
-                            <p className="text-sm leading-1 text-zinc-400">@crish1248</p>
+                            <h2 className="text-white font-semibold text-lg">{user?.fullName}</h2>
+                            <p className="text-sm leading-1 text-zinc-400">@{user?.username}</p>
                         </div>
 
                         {/* Stats */}

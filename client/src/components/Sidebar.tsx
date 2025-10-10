@@ -9,10 +9,13 @@ import {
     User,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import useUserStore from "../stores/userStore";
 
 const Sidebar = () => {
     const [logoutMenu, setLogoutMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    const { user } = useUserStore();
 
     // Close menu when clicking outside
     useEffect(() => {
@@ -80,8 +83,8 @@ const Sidebar = () => {
                             alt="profile"
                         />
                         <div className="flex flex-col text-left">
-                            <h1 className="font-semibold text-white">Krish Prajapati</h1>
-                            <p className="text-sm text-zinc-500 font-medium">@crish</p>
+                            <h1 className="font-semibold text-white">{user?.fullName}</h1>
+                            <p className="text-sm text-zinc-500 font-medium">@{user?.username}</p>
                         </div>
                     </div>
                     <Ellipsis size={20} className="text-zinc-400" />
