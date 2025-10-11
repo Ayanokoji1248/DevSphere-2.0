@@ -4,10 +4,12 @@ import { NavLink, useNavigate } from "react-router-dom"
 import useAuthStore from "../stores/authStore";
 import { userLoginSchema } from "../utils/zod_schema";
 import toast from "react-hot-toast";
+import Spinner from "../components/Spinner";
 
 const LoginPage = () => {
     const navigate = useNavigate();
     const { login } = useAuthStore();
+    const [loading, setLoading] = useState(false)
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -33,6 +35,7 @@ const LoginPage = () => {
             setError(newErrors)
             return
         }
+        setLoading(true)
         try {
             await login(email, password);
             navigate('/home')
@@ -44,6 +47,7 @@ const LoginPage = () => {
         finally {
             setEmail("");
             setPassword("");
+            setLoading(false)
         }
 
     }
@@ -101,7 +105,13 @@ const LoginPage = () => {
                         {error.password && <p className="text-xs text-red-500 font-medium">{error.password}</p>}
                     </div>
 
-                    <button className="bg-white text-black mt-2 p-2 rounded-md font-medium cursor-pointer hover:bg-zinc-200 transition-all duration-300">Login</button>
+                    <button disabled={loading} className="bg-white text-black mt-2 p-2 rounded-md font-medium cursor-pointer hover:bg-zinc-200 transition-all duration-300 disabled:bg-neutral-500 flex items-center justify-center gap-3">
+                        Login
+                        {
+                            loading &&
+                            <Spinner />
+                        }
+                    </button>
 
                     <p className="text-sm">
                         Don't have an account?{" "}

@@ -1,9 +1,36 @@
 import { Code, Image, Link } from "lucide-react";
 import PostCard from "../components/PostCard";
 import usePostStore from "../stores/postStore";
+import { useEffect, useState } from "react";
+import useAuthStore from "../stores/authStore";
+import { useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 const HomePage = () => {
-    const { posts } = usePostStore()
+    const { posts, fetchAllPost } = usePostStore()
+    const { isAuthenticated } = useAuthStore();
+    const [loading, setLoading] = useState(false)
+
+    const [text, setText] = useState("")
+
+    const navigate = useNavigate()
+    useEffect(() => {
+        const loadPosts = async () => {
+            if (!isAuthenticated) {
+                navigate('/login', { replace: true });
+                return;
+            }
+
+            setLoading(true);
+            await fetchAllPost(); // Wait for posts to load
+            setLoading(false);
+        };
+
+        loadPosts();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthenticated])
+
     return (
         <div className="">
             {/* Create Post */}
@@ -19,6 +46,8 @@ const HomePage = () => {
                     {/* Textarea + Actions */}
                     <div className="flex-1 flex flex-col gap-2">
                         <textarea
+                            onChange={(e) => setText(e.target.value)}
+                            value={text}
                             className="w-full h-24 resize-none outline-none p-3 border border-zinc-600 rounded-md bg-zinc-950 text-sm font-medium placeholder:text-zinc-500"
                             name="feed"
                             id="feed"
@@ -38,7 +67,7 @@ const HomePage = () => {
                                 <Code size={18} />
                                 <span className="text-sm font-medium">Code</span>
                             </div>
-                            <button disabled={true} className="disabled:bg-violet-700/70 disabled:cursor-default flex-1 p-3 bg-violet-600 rounded-md font-medium hover:bg-violet-700 transition cursor-pointer">
+                            <button disabled={!text.trim()} className="disabled:bg-violet-700/70 disabled:cursor-default flex-1 p-3 bg-violet-600 rounded-md font-medium hover:bg-violet-700 transition cursor-pointer">
                                 Post
                             </button>
                         </div>
@@ -48,6 +77,10 @@ const HomePage = () => {
 
             {/* Posts */}
             <div className="mt-3 flex flex-col">
+                {loading &&
+                    <div className="flex items-center justify-center gap-2 text-sm text-zinc-500 font-medium">Loading Post <Spinner /></div>
+                }
+
                 {posts.map((post) => (
                     <PostCard
                         key={post._id}

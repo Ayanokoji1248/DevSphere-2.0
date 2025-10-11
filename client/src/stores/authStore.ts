@@ -2,10 +2,10 @@ import axios, { isAxiosError } from "axios";
 import { create } from "zustand";
 import { BACKEND_URL } from "../utils";
 import useUserStore from "./userStore";
-import usePostStore from "./postStore";
 
 type authState = {
     isAuthenticated: boolean,
+    setIsAuthenticated: (authState: boolean) => void,
     login: (email: string, password: string) => Promise<void>
     register: (fullName: string, username: string, email: string, password: string) => Promise<void>
     logout: () => Promise<void>
@@ -14,6 +14,9 @@ type authState = {
 
 const useAuthStore = create<authState>((set) => ({
     isAuthenticated: false,
+    setIsAuthenticated: (authState) => {
+        set({ isAuthenticated: authState })
+    },
     login: async (email, password) => {
         try {
             const response = await axios.post(`${BACKEND_URL}/auth/login`, {
@@ -23,7 +26,6 @@ const useAuthStore = create<authState>((set) => ({
 
             console.log(response.data)
             useUserStore.getState().setUser(response.data.user);
-            usePostStore.getState().fetechAllPost()
             set({ isAuthenticated: true })
 
         } catch (error) {
@@ -38,7 +40,7 @@ const useAuthStore = create<authState>((set) => ({
     },
     register: async (fullName, username, email, password) => {
         try {
-            const response = await axios.post(`${BACKEND_URL}/auth/login`, {
+            const response = await axios.post(`${BACKEND_URL}/auth/register`, {
                 fullName,
                 username,
                 email,

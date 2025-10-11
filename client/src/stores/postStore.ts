@@ -5,13 +5,13 @@ import { BACKEND_URL } from "../utils";
 
 type postStoreType = {
     posts: postProp[],
-    fetechAllPost: () => Promise<void>
+    fetchAllPost: () => Promise<void>
 }
 
 
 const usePostStore = create<postStoreType>((set) => ({
     posts: [],
-    fetechAllPost: async () => {
+    fetchAllPost: async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/post/all`, {
                 withCredentials: true

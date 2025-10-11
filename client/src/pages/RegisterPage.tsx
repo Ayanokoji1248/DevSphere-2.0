@@ -4,12 +4,14 @@ import { useState, type FormEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import useAuthStore from "../stores/authStore";
+import Spinner from "../components/Spinner";
 
 const RegisterPage = () => {
 
     const { register } = useAuthStore();
     const navigate = useNavigate()
 
+    const [loading, setLoading] = useState(false)
     const [fullName, setFullName] = useState("")
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
@@ -37,7 +39,7 @@ const RegisterPage = () => {
             setError(newErrors)
             return
         }
-
+        setLoading(true);
         try {
             await register(fullName, username, email, password);
             navigate('/home')
@@ -47,6 +49,7 @@ const RegisterPage = () => {
             });
         }
         finally {
+            setLoading(false)
             setFullName("")
             setUsername("")
             setEmail("")
@@ -151,7 +154,11 @@ const RegisterPage = () => {
                     </div>
 
 
-                    <button className="bg-white mt-2 text-black p-2 rounded-md font-medium cursor-pointer hover:bg-zinc-200 transition-all duration-300">Register</button>
+                    <button
+                        disabled={loading} className="bg-white mt-2 text-black p-2 rounded-md font-medium cursor-pointer hover:bg-zinc-200 transition-all duration-300 disabled:bg-neutral-500 flex items-center justify-center gap-3">
+                        Register
+                        {loading && <Spinner />}
+                    </button>
 
                     <p className="text-sm">
                         Already have an account?{" "}

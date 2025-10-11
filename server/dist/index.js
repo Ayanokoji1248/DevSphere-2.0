@@ -19,6 +19,7 @@ const cors_1 = __importDefault(require("cors"));
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
 const dbConnection_1 = __importDefault(require("./config/dbConnection"));
 const post_route_1 = __importDefault(require("./routes/post.route"));
+const user_route_1 = __importDefault(require("./routes/user.route"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -30,6 +31,7 @@ app.use((0, cors_1.default)({
 }));
 app.use('/api/auth', auth_route_1.default);
 app.use('/api/post', post_route_1.default);
+app.use('/api/user', user_route_1.default);
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, dbConnection_1.default)();

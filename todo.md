@@ -10,3 +10,51 @@
 - [X] Add zod validation
 - [ ] Protected Routes
 - [ ] call /me endpoint on refresh and update the user state
+
+
+## Approach
+- So what i was doing is that after register/login i fetch post instantly but what i was thinkging that fetching post will take time and in login page it will show keep loading until all posts comes so what we will do is we will move fetchPost function to homepage and check if user is authenticated if it is then only we fetch post
+
+```
+    Never make global loading state instead of that make local loading state on eact component when needed
+```
+
+1️⃣ Problem
+
+After login, you go to /home correctly, but on refresh, the app redirects to /login.
+
+Reason: isAuthenticated in the store is false by default, and the app checks it before restoring the session from the backend.
+
+2️⃣ Solution
+
+We introduced a loading/initializing mechanism to handle session restoration:
+
+Add initializing or loading state:
+
+This state tracks whether the app is checking for an existing user session.
+
+While true, we show a loading spinner or Lottie animation instead of redirecting.
+
+Restore session on app load:
+
+Use useEffect in App.tsx to call a backend endpoint like /user/me.
+
+If the response is valid:
+
+Set user data in userStore.
+
+Set isAuthenticated = true.
+
+If not valid:
+
+Set isAuthenticated = false.
+
+Finally, set initializing = false.
+
+ProtectedRoute component:
+
+If loading/initializing = true → show spinner or Lottie.
+
+Else if isAuthenticated = false → redirect to /login.
+
+Else → render the protected route (<Outlet />).
