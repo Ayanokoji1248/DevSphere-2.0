@@ -66,6 +66,7 @@ const userRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             username,
             email,
             password: hashPass,
+            profilePic: `https://api.dicebear.com/9.x/bottts/svg?seed=${username}`
         });
         yield user.save();
         const token = (0, generateToken_1.generateToken)({ _id: user._id.toString(), email: user.email });

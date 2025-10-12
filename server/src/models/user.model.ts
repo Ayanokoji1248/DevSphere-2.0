@@ -1,4 +1,5 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
+import { minLength } from "zod";
 
 const userSchema = new Schema({
     bannerImage: {
@@ -32,7 +33,32 @@ const userSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-    }
+    },
+    headling: {
+        type: String,
+        trim: true,
+        minLength: [2, "Atleast 2 character"]
+    },
+    bio: {
+        type: String,
+        trim: true,
+        minLength: [10, "Atleast 10 character"]
+    },
+    address: {
+        type: String,
+        trim: true,
+    },
+    portfolioLink: {
+        type: String,
+        trim: true,
+    },
+    skills: [{
+        type: String,
+    }],
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "post"
+    }]
 }, { timestamps: true });
 
 const User = model("user", userSchema);

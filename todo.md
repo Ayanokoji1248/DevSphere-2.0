@@ -8,8 +8,15 @@
 - [X] Init React with login/register
 - [X] add zustand for user
 - [X] Add zod validation
-- [ ] Protected Routes
-- [ ] call /me endpoint on refresh and update the user state
+- [X] Protected Routes
+- [X] call /me endpoint on refresh and update the user state
+- [X] Also Added Lottie Animation
+- [ ] Add Static files for profilePic and banner Image
+- [ ] User Logout 
+- [ ] Post Modal for link image & code 
+- [ ] Lazy Loading/ pagination 
+- [ ] Delete Post 
+- [ ] User Profile and another user profile 
 
 
 ## Approach

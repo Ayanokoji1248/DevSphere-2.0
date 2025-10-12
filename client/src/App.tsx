@@ -58,7 +58,7 @@ const App = () => {
       <Route element={<ProtectedRoute />} >
         <Route element={<MainLayout />} >
           <Route path='/home' element={<HomePage />} />
-          <Route path='/profile' element={<ProfilePage />} />
+          <Route path='/user/:id' element={<ProfilePage />} />
         </Route>
       </Route>
 

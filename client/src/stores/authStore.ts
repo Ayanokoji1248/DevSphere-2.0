@@ -65,7 +65,9 @@ const useAuthStore = create<authState>((set) => ({
             await axios.post(`${BACKEND_URL}/auth/logout`, {}, {
                 withCredentials: true
             })
+
             set({ isAuthenticated: false })
+            useUserStore.getState().clearUser()
         } catch (error) {
             console.error(error)
         }

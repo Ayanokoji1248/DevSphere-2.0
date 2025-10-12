@@ -51,6 +51,7 @@ export const userRegister = async (req: Request, res: Response) => {
             username,
             email,
             password: hashPass,
+            profilePic: `https://api.dicebear.com/9.x/bottts/svg?seed=${username}`
         })
         await user.save();
 

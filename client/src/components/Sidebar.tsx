@@ -10,11 +10,15 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import useUserStore from "../stores/userStore";
+import useAuthStore from "../stores/authStore";
+import CreatePostModal from "./CreatePostModal";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
     const [logoutMenu, setLogoutMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-
+    const [modal, setModal] = useState(false)
+    const { logout } = useAuthStore();
     const { user } = useUserStore();
 
     // Close menu when clicking outside
@@ -28,8 +32,15 @@ const Sidebar = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const logoutUser = async () => {
+        await logout()
+    }
+
     return (
-        <div className="hidden md:flex w-full md:w-[20%] h-screen border-b md:border-b-0 md:border-r border-zinc-600  flex-col justify-between items-center px-2 py-4 md:py-6 sticky top-0 bg-black">
+        <div className="hidden md:flex w-full md:w-[20%] h-screen border-b md:border-b-0 md:border-r border-zinc-600  flex-col justify-between items-center px-2 py-4 md:py-6 sticky top-0 bg-zinc-950">
+
+            {modal && <CreatePostModal setModal={setModal} />}
+
             {/* Top Section */}
             <div className="flex flex-col justify-center gap-10 px-4 w-full">
                 {/* Logo */}
@@ -48,23 +59,26 @@ const Sidebar = () => {
                 {/* Navigation */}
                 <div className="flex flex-col gap-1 w-full">
                     {[
-                        { icon: <HomeIcon />, label: "Home" },
-                        { icon: <Search />, label: "Explore" },
-                        { icon: <FolderCode />, label: "Projects" },
-                        { icon: <Code />, label: "Code Review" },
-                        { icon: <User />, label: "Profile" },
+                        { icon: <HomeIcon />, label: "Home", path: "/home" },
+                        { icon: <Search />, label: "Explore", path: "/home" },
+                        { icon: <FolderCode />, label: "Projects", path: "/home" },
+                        { icon: <Code />, label: "Code Review", path: "/home" },
+                        { icon: <User />, label: "Profile", path: `/user/${user?._id}` },
                     ].map((item, index) => (
-                        <div
+                        <Link to={item.path}
                             key={index}
                             className="flex items-center justify-start p-3 px-5 gap-5 hover:bg-zinc-900 rounded-full transition-all duration-300 cursor-pointer w-fit"
                         >
                             {item.icon}
                             <h2 className="text-xl font-semibold">{item.label}</h2>
-                        </div>
+                        </Link>
                     ))}
 
                     {/* Post Button */}
-                    <button className="w-full p-3 bg-violet-600 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-violet-700 cursor-pointer mt-3">
+                    <button
+                        onClick={() => {
+                            setModal(true)
+                        }} className="w-full p-3 bg-violet-600 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-violet-700 cursor-pointer mt-3">
                         Post
                     </button>
                 </div>
@@ -78,8 +92,8 @@ const Sidebar = () => {
                 >
                     <div className="flex items-center gap-3">
                         <img
-                            className="w-12 h-12 rounded-full"
-                            src="https://i.pinimg.com/1200x/00/80/fc/0080fcbb036ac608f882c656509ea355.jpg"
+                            className="w-12 h-12 rounded-full object-cover border border-zinc-700"
+                            src={user?.profilePic}
                             alt="profile"
                         />
                         <div className="flex flex-col text-left">
@@ -93,11 +107,14 @@ const Sidebar = () => {
                 {/* Logout Dropdown */}
                 {logoutMenu && (
                     <div
-                        className="absolute bottom-[80px] left-0 w-full bg-zinc-950 border border-zinc-700 
+                        className="absolute bottom-[80px] left-0 w-full bg-zinc-900 border border-zinc-700 
                        p-3 rounded-md animate-fadeIn z-50 shadow-lg"
                     >
                         <button
-                            onClick={() => setLogoutMenu(false)}
+                            onClick={() => {
+                                logoutUser()
+                                setLogoutMenu(false)
+                            }}
                             className="text-red-500 font-medium hover:text-red-600 transition w-full flex items-center justify-between cursor-pointer"
                         >
                             Logout

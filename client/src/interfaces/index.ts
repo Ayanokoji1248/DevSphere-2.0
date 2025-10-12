@@ -4,10 +4,15 @@ export interface userProp {
     username: string,
     bannerImage?: string,
     profilePic?: string,
+    heading?: string,
+    bio?: string,
+    address?: string,
+    portfolioLink?: string,
+    skills?: string[] | [],
 }
 
 export interface postProp {
-    _id?: string,
+    _id: string,
     text: string,
     imageUrl: string,
     code: string,

@@ -2,12 +2,16 @@ import { useState, useRef, useEffect } from "react";
 import { Ellipsis, Heart, MessageCircle } from "lucide-react";
 import type { postProp } from "../interfaces";
 import useUserStore from "../stores/userStore";
+import toast from "react-hot-toast";
+import usePostStore from "../stores/postStore";
 
-const PostCard = ({ text, imageUrl, code, link, user, likes }: postProp) => {
+const PostCard = ({ _id, text, imageUrl, code, link, user, likes }: postProp) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
     const { user: currentUser } = useUserStore()
+
+    const { deletePost } = usePostStore()
 
     // Close menu when clicking outside
     useEffect(() => {
@@ -25,19 +29,28 @@ const PostCard = ({ text, imageUrl, code, link, user, likes }: postProp) => {
         setMenuOpen(false);
     };
 
-    const handleDelete = () => {
-        alert("Delete clicked!");
-        setMenuOpen(false);
+    const handleDelete = async (postId: string) => {
+        try {
+            const deleteConfirm = confirm("Do you want to delete it?");
+            if (deleteConfirm) {
+                await deletePost(postId);
+                toast.success("Post deleted successfully")
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("Post Deletion Failed")
+        } finally {
+            setMenuOpen(false);
+        }
     };
 
     return (
         <div className="w-full bg-black text-white border-y border-zinc-800 p-6 flex flex-col gap-4 rounded-lg hover:bg-[#090909] cursor-pointer transition-all duration-300">
-
             {/* Header */}
             <div className="flex justify-between items-start">
                 <div className="flex gap-3">
                     <img
-                        className="w-12 h-12 rounded-full object-cover"
+                        className="w-12 h-12 rounded-full object-cover border border-zinc-700"
                         src={user.profilePic}
                         alt="profile"
                     />
@@ -67,7 +80,10 @@ const PostCard = ({ text, imageUrl, code, link, user, likes }: postProp) => {
                                 Edit
                             </button>
                             <button
-                                onClick={handleDelete}
+                                onClick={() => {
+                                    console.log(_id)
+                                    handleDelete(_id)
+                                }}
                                 className="text-sm font-semibold w-full px-5 py-1 cursor-pointer text-red-500 hover:text-red-400 hover:bg-zinc-800  transition-all duration-300"
                             >
                                 Delete

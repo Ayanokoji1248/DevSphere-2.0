@@ -1,10 +1,17 @@
-import { Outlet } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
 import useUserStore from "../stores/userStore"
+import usePostStore from "../stores/postStore"
+import { useEffect } from "react"
 
 
 const MainLayout = () => {
     const { user } = useUserStore()
+    const { fetchAllPost, posts } = usePostStore();
+
+    useEffect(() => {
+        fetchAllPost()
+    }, [])
 
     return (
         <div className="bg-zinc-950 relative w-full" id="main">
@@ -24,9 +31,9 @@ const MainLayout = () => {
                         {/* Profile */}
                         <div className="flex flex-col items-center gap-2 mb-2">
                             <img
-                                src="https://i.pinimg.com/1200x/00/80/fc/0080fcbb036ac608f882c656509ea355.jpg"
+                                src={user?.profilePic}
                                 alt="profile"
-                                className="w-20 h-20 rounded-full object-cover"
+                                className="w-20 h-20 rounded-full object-cover border border-zinc-700"
                             />
                             <h2 className="text-white font-semibold text-lg">{user?.fullName}</h2>
                             <p className="text-sm leading-1 text-zinc-400">@{user?.username}</p>
@@ -43,7 +50,7 @@ const MainLayout = () => {
                                 <p className="text-sm text-zinc-400">Following</p>
                             </div>
                             <div>
-                                <p className="text-white font-medium">34</p>
+                                <p className="text-white font-medium">{posts.filter((post) => post.user._id === user?._id).length}</p>
                                 <p className="text-sm text-zinc-400">Posts</p>
                             </div>
                             <div>
@@ -53,9 +60,9 @@ const MainLayout = () => {
                         </div>
 
                         {/* Optional Action */}
-                        <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 transition rounded-md font-medium cursor-pointer">
+                        <Link to={`/user/${user?._id}`} className="w-full py-2 bg-blue-600 hover:bg-blue-700 transition rounded-md font-medium cursor-pointer flex justify-center items-center">
                             View Profile
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

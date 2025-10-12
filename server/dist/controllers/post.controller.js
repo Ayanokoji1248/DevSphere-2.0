@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allPosts = exports.createPost = void 0;
+exports.deletePost = exports.allPosts = exports.createPost = void 0;
 const post_model_1 = __importDefault(require("../models/post.model"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.user.id;
@@ -26,8 +27,10 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             user: userId
         });
         yield post.save();
+        yield post.populate("user", "_id username fullName profilePic");
         res.status(201).json({
-            message: "Post created successfully"
+            message: "Post created successfully",
+            post
         });
         return;
     }
@@ -58,3 +61,30 @@ const allPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.allPosts = allPosts;
+const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.user.id;
+        const postId = req.params.id;
+        if (!postId || !mongoose_1.default.isValidObjectId(postId)) {
+            res.status(404).json({
+                message: "Invalid Post Id"
+            });
+            return;
+        }
+        const post = yield post_model_1.default.findOneAndDelete({ _id: postId, user: userId });
+        if (!post) {
+            res.status(404).json({ message: "Post not found or unauthorized" });
+            return;
+        }
+        res.status(200).json({ message: "Post deleted successfully" });
+        return;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+        return;
+    }
+});
+exports.deletePost = deletePost;
