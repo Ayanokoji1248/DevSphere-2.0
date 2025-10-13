@@ -6,7 +6,7 @@ import { BACKEND_URL } from "../utils";
 type postStoreType = {
     posts: postProp[],
     fetchAllPost: () => Promise<void>,
-    addPost: (text: string) => Promise<void>
+    addPost: (text: string, code?: string, link?: string, imageUrl?: string) => Promise<void>
     deletePost: (postId: string) => Promise<void>
 }
 
@@ -23,9 +23,9 @@ const usePostStore = create<postStoreType>((set) => ({
             console.error(error)
         }
     },
-    addPost: async (text) => {
+    addPost: async (text, code, link, imageUrl) => {
         try {
-            const response = await axios.post(`${BACKEND_URL}/post/create`, { text: text }, {
+            const response = await axios.post(`${BACKEND_URL}/post/create`, { text: text, code: code, link: link, imageUrl: imageUrl }, {
                 withCredentials: true
             })
 

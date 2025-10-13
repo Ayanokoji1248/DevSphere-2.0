@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import useAuthStore from './stores/authStore'
 import Lottie from 'lottie-react'
 import loadingAnimation from "./assets/Minimal Style 3D Sphere Animation.json"
+import PostPage from './pages/PostPage'
 
 const App = () => {
 
@@ -59,6 +60,7 @@ const App = () => {
         <Route element={<MainLayout />} >
           <Route path='/home' element={<HomePage />} />
           <Route path='/user/:id' element={<ProfilePage />} />
+          <Route path='/post/:id' element={<PostPage />} />
         </Route>
       </Route>
 

@@ -45,6 +45,8 @@ const ProfilePage = () => {
     //         "https://i.pinimg.com/736x/e4/09/bf/e409bf64dc35dfedac8feb356f9124a5.jpg",
     // };
 
+    // compute post count for the profile being viewed (userProfile) safely
+    const userPost = posts.filter((post) => post?.user?._id === userProfile?._id).length
 
     useEffect(() => {
 
@@ -202,20 +204,26 @@ const ProfilePage = () => {
 
                 {/* Tab Content */}
                 <div className="mt-5 pb-5 flex flex-col">
-                    {activeTab === "Posts" &&
-                        posts.filter((post) => post.user._id === userProfile?._id).map((post) => (
-                            <PostCard
-                                key={post._id}
-                                _id={post._id}
-                                text={post.text}
-                                code={post.code}
-                                link={post.link}
-                                imageUrl={post.imageUrl}
-                                user={post.user}
-                                likes={post.likes}
-                            />
-                        ))
-                    }
+                    {activeTab === "Posts" && (
+                        userPost > 0 ? (
+                            posts
+                                .filter((post) => post?.user?._id === userProfile?._id)
+                                .map((post) => (
+                                    <PostCard
+                                        key={post._id}
+                                        _id={post._id}
+                                        text={post.text}
+                                        code={post.code}
+                                        link={post.link}
+                                        imageUrl={post.imageUrl}
+                                        user={post.user}
+                                        likes={post.likes}
+                                    />
+                                ))
+                        ) : (
+                            <p className="text-sm text-center font-medium text-zinc-600">No post yet.</p>
+                        )
+                    )}
 
                     {activeTab === "Projects" &&
                         // user.projects.map((project, idx) => (

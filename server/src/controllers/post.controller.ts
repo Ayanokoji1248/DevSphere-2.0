@@ -51,6 +51,42 @@ export const allPosts = async (req: Request, res: Response) => {
     }
 }
 
+export const getPost = async (req: Request, res: Response) => {
+    try {
+
+        const postId = req.params.id;
+
+        if (!postId || !mongoose.isValidObjectId(postId)) {
+            res.status(400).json({
+                message: "Invalid Post Id"
+            })
+            return
+        }
+
+        const post = await Post.findById(postId).populate("user", "_id username fullName profilePic");
+
+        if (!post) {
+            res.status(404).json({
+                message: "Post Not Found"
+            })
+            return
+        }
+
+        res.status(200).json({
+            message: "Post Found",
+            post
+        })
+        return
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+        return
+    }
+}
+
 export const deletePost = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;

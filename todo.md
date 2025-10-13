@@ -12,11 +12,13 @@
 - [X] call /me endpoint on refresh and update the user state
 - [X] Also Added Lottie Animation
 - [ ] Add Static files for profilePic and banner Image
-- [ ] User Logout 
-- [ ] Post Modal for link image & code 
+- [X] User Logout 
+- [X] Post Modal for link image & code 
 - [ ] Lazy Loading/ pagination 
-- [ ] Delete Post 
-- [ ] User Profile and another user profile 
+- [X] Delete Post 
+- [X] User Profile and another user profile 
+- [X] supabase integration for image storage performance wise very low
+- [ ] use cloudinary for image storage it will be easy and also performance wise
 
 
 ## Approach

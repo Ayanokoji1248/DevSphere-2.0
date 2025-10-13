@@ -1,6 +1,9 @@
 import { X } from 'lucide-react';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import usePostStore from '../stores/postStore';
+import generateImageUrl from '../utils/generateImageUrl';
+import useUserStore from '../stores/userStore';
 
 interface modalProp {
     setModal: (open: boolean) => void
@@ -15,6 +18,9 @@ const CreatePostModal = ({ setModal }: modalProp) => {
     const [link, setLink] = useState("")
     const [image, setImage] = useState<File | null>(null)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+    const { addPost } = usePostStore()
+    const { user } = useUserStore()
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -35,7 +41,19 @@ const CreatePostModal = ({ setModal }: modalProp) => {
             formData.append("link", link);
             if (image) formData.append("image", image);
 
-            // await addPost(formData as any);
+            if (!user || !user._id) {
+                setLoading(false)
+                return null
+            }
+
+            const imageUrl = await generateImageUrl(user._id, image as File)
+
+            if (imageUrl == null) {
+                setLoading(false)
+                return
+            }
+
+            await addPost(text, code, link, imageUrl);
 
             setText("");
             setCode("");
@@ -72,7 +90,7 @@ const CreatePostModal = ({ setModal }: modalProp) => {
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             placeholder="What's on your mind?"
-                            className="w-full bg-zinc-800 text-white p-2 rounded focus:outline-none"
+                            className="w-full bg-zinc-800 min-h-24 resize-none text-white p-2 rounded focus:outline-none"
                             required
                         />
                     </div>
@@ -85,7 +103,7 @@ const CreatePostModal = ({ setModal }: modalProp) => {
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
                             placeholder="Add code snippet (optional)"
-                            className="w-full bg-zinc-800 text-white p-2 rounded focus:outline-none"
+                            className="w-full bg-zinc-800 min-h-32 resize-none text-white p-2 rounded focus:outline-none"
                         />
                     </div>
 
