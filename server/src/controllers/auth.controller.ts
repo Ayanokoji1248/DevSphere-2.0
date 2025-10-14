@@ -3,7 +3,6 @@ import User from "../models/user.model";
 import bcrypt from "bcrypt"
 import { generateToken } from "../utils/generateToken";
 import { z } from "zod"
-import { createUserFolder } from "../utils/generateUserFolder";
 
 const userRegisterSchema = z.object({
     fullName: z.string().min(5, "Atleast 5 character required"),
@@ -65,8 +64,6 @@ export const userRegister = async (req: Request, res: Response) => {
         })
 
         const { password: _, ...userData } = user.toObject();
-
-        await createUserFolder(user._id.toString())
 
         res.status(201).json({
             message: "User Register Successfully",

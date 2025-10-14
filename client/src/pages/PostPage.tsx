@@ -73,11 +73,14 @@ const PostPage = () => {
         getPost()
     }, [id])
 
-    if (!post) return (<div>
-        <p>Post not found</p>
+    if (loading) return (<div>
+        <p>Loading...</p>
     </div>)
 
+    if (!post) return (<div><p>Post not Found</p></div>)
+
     return (
+
         <div className="">
             <div className="p-5">
                 <button onClick={() => navigate('/home')} className="p-2 bg-zinc-950 rounded-md border border-zinc-700 hover:bg-zinc-900 transition-all duration-300 cursor-pointer"><ArrowLeft /></button>
@@ -218,6 +221,7 @@ const PostPage = () => {
             </div>
 
         </div>
+
     )
 }
 

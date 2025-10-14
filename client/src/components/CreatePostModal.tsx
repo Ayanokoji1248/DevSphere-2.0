@@ -2,25 +2,24 @@ import { X } from 'lucide-react';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import usePostStore from '../stores/postStore';
-import generateImageUrl from '../utils/generateImageUrl';
 import useUserStore from '../stores/userStore';
 
 interface modalProp {
-    setModal: (open: boolean) => void
+    setModal: (open: boolean) => void;
 }
 
 const CreatePostModal = ({ setModal }: modalProp) => {
     const root = document.getElementById("main") as HTMLElement;
     const [loading, setLoading] = useState(false);
 
-    const [text, setText] = useState("")
-    const [code, setCode] = useState("")
-    const [link, setLink] = useState("")
-    const [image, setImage] = useState<File | null>(null)
+    const [text, setText] = useState("");
+    const [code, setCode] = useState("");
+    const [link, setLink] = useState("");
+    const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    const { addPost } = usePostStore()
-    const { user } = useUserStore()
+    const { addPost } = usePostStore();
+    const { user } = useUserStore();
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -30,31 +29,52 @@ const CreatePostModal = ({ setModal }: modalProp) => {
         }
     };
 
+    const uploadToCloudinary = async (file: File): Promise<string | null> => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "DevSphere"); // replace with your unsigned preset
+        formData.append("folder", "uploads"); // optional: Cloudinary folder name
+
+        try {
+            const res = await fetch(
+                "https://api.cloudinary.com/v1_1/dp7qerjic/image/upload", // replace YOUR_CLOUD_NAME
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+            const data = await res.json();
+            return data.secure_url || null;
+        } catch (error) {
+            console.error("Cloudinary upload error:", error);
+            return null;
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            const formData = new FormData();
-            formData.append("text", text);
-            formData.append("code", code);
-            formData.append("link", link);
-            if (image) formData.append("image", image);
-
             if (!user || !user._id) {
-                setLoading(false)
-                return null
+                setLoading(false);
+                return;
             }
 
-            const imageUrl = await generateImageUrl(user._id, image as File)
-
-            if (imageUrl == null) {
-                setLoading(false)
-                return
+            let imageUrl: string | null = null;
+            if (image) {
+                imageUrl = await uploadToCloudinary(image);
+                if (!imageUrl) {
+                    alert("Image upload failed!");
+                    setLoading(false);
+                    return;
+                }
+                console.log(imageUrl)
             }
 
-            await addPost(text, code, link, imageUrl);
+            await addPost(text, code, link, imageUrl as string);
 
+            // reset
             setText("");
             setCode("");
             setLink("");
@@ -62,7 +82,7 @@ const CreatePostModal = ({ setModal }: modalProp) => {
             setImagePreview(null);
             setModal(false);
         } catch (error) {
-            console.error(error);
+            console.error("Error creating post:", error);
         } finally {
             setLoading(false);
         }
@@ -84,7 +104,9 @@ const CreatePostModal = ({ setModal }: modalProp) => {
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                     {/* Text */}
                     <div className="flex flex-col">
-                        <label htmlFor="text" className="text-sm text-zinc-300 mb-1">Post Text</label>
+                        <label htmlFor="text" className="text-sm text-zinc-300 mb-1">
+                            Post Text
+                        </label>
                         <textarea
                             id="text"
                             value={text}
@@ -97,7 +119,9 @@ const CreatePostModal = ({ setModal }: modalProp) => {
 
                     {/* Code */}
                     <div className="flex flex-col">
-                        <label htmlFor="code" className="text-sm text-zinc-300 mb-1">Code Snippet</label>
+                        <label htmlFor="code" className="text-sm text-zinc-300 mb-1">
+                            Code Snippet
+                        </label>
                         <textarea
                             id="code"
                             value={code}
@@ -109,7 +133,9 @@ const CreatePostModal = ({ setModal }: modalProp) => {
 
                     {/* Link */}
                     <div className="flex flex-col">
-                        <label htmlFor="link" className="text-sm text-zinc-300 mb-1">Link</label>
+                        <label htmlFor="link" className="text-sm text-zinc-300 mb-1">
+                            Link
+                        </label>
                         <input
                             id="link"
                             type="url"
@@ -122,7 +148,9 @@ const CreatePostModal = ({ setModal }: modalProp) => {
 
                     {/* Image */}
                     <div className="flex flex-col">
-                        <label htmlFor="image" className="text-sm text-zinc-300 mb-1">Upload Image</label>
+                        <label htmlFor="image" className="text-sm text-zinc-300 mb-1">
+                            Upload Image
+                        </label>
                         <input
                             id="image"
                             type="file"
@@ -148,8 +176,9 @@ const CreatePostModal = ({ setModal }: modalProp) => {
                     </button>
                 </form>
             </div>
-        </div>
-        , root)
-}
+        </div>,
+        root
+    );
+};
 
 export default CreatePostModal;

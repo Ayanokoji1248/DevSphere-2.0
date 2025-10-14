@@ -18,8 +18,16 @@
 - [X] Delete Post 
 - [X] User Profile and another user profile 
 - [X] supabase integration for image storage performance wise very low
-- [ ] use cloudinary for image storage it will be easy and also performance wise
+- [X] use cloudinary for image storage it will be easy and also performance wise
+- [ ] modal and api of comment and comment modal to show in FE
+- [ ] other user profile route in FE
+- [ ] Edit user profile 
+- [ ] better ui of create post model 
+- [ ] resturcture the html of post page
+- [ ] add navigation bar with responsive
 
+
+##### Performance wise it is low very low  
 
 ## Approach
 - So what i was doing is that after register/login i fetch post instantly but what i was thinkging that fetching post will take time and in login page it will show keep loading until all posts comes so what we will do is we will move fetchPost function to homepage and check if user is authenticated if it is then only we fetch post

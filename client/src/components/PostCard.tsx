@@ -99,39 +99,42 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes }: postProp) =>
                         </div>
                     </div>
                 </div>
+                <div className="flex flex-col gap-4">
 
-                {/* Post Text */}
-                <p className="text-sm pb-4 text-zinc-100 font-medium">{text}</p>
+                    {/* Post Text */}
+                    <p className="text-sm text-zinc-100 font-medium">{text}</p>
 
-                {/* Link */}
-                {link && (
-                    <a
-                        href={link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block border border-blue-700 rounded-lg p-4 font-medium outline-none bg-blue-950/50"
-                    >
-                        <p className="text-md text-blue-500 truncate">{link}</p>
-                    </a>
-                )}
+                    {/* Link */}
+                    {link && (
+                        <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block border border-blue-700 rounded-lg p-4 font-medium outline-none bg-blue-950/50"
+                        >
+                            <p className="text-xs lg:text-sm w-full wrap-break-word text-blue-500">{link}</p>
+                        </a>
+                    )}
 
-                {/* Code */}
-                {code && (
-                    <pre className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm font-mono text-zinc-200 whitespace-pre-wrap break-words">
-                        <code className="text-emerald-500">{code}</code>
-                    </pre>
-                )}
+                    {/* Code */}
+                    {code && (
+                        <pre className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm font-mono text-zinc-200 whitespace-pre-wrap break-words">
+                            <code className="text-emerald-500">{code}</code>
+                        </pre>
+                    )}
 
-                {/* Image */}
-                {imageUrl && (
-                    <div className="w-full aspect-auto bg-zinc-800 rounded-xl overflow-hidden">
-                        <img
-                            src={imageUrl}
-                            alt="post"
-                            className="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-300"
-                        />
-                    </div>
-                )}
+                    {/* Image */}
+                    {imageUrl && (
+                        <div className="w-full aspect-auto bg-zinc-800 rounded-xl overflow-hidden">
+                            <img
+                                loading="lazy"
+                                src={imageUrl}
+                                alt="post"
+                                className="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-300"
+                            />
+                        </div>
+                    )}
+                </div>
 
                 {/* Tags */}
                 {/* {post.tags && post.tags.length > 0 && (

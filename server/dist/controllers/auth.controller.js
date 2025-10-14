@@ -28,7 +28,6 @@ const user_model_1 = __importDefault(require("../models/user.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const generateToken_1 = require("../utils/generateToken");
 const zod_1 = require("zod");
-const generateUserFolder_1 = require("../utils/generateUserFolder");
 const userRegisterSchema = zod_1.z.object({
     fullName: zod_1.z.string().min(5, "Atleast 5 character required"),
     username: zod_1.z.string().min(5, "Atleast 5 character required"),
@@ -77,7 +76,6 @@ const userRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
         const _a = user.toObject(), { password: _ } = _a, userData = __rest(_a, ["password"]);
-        yield (0, generateUserFolder_1.createUserFolder)(user._id.toString());
         res.status(201).json({
             message: "User Register Successfully",
             user: userData
