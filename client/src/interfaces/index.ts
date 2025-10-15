@@ -23,5 +23,13 @@ export interface postProp {
         profilePic: string,
         username: string
     },
-    likes: userProp[]
+    likes: userProp[],
+    comments: commentProp[]
+}
+
+export interface commentProp {
+    _id?: string,
+    post: postProp,
+    text: string,
+    user: userProp,
 }

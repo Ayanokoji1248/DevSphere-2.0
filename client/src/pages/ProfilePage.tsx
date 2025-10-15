@@ -71,7 +71,7 @@ const ProfilePage = () => {
             {/* Cover */}
             <div className="h-48 md:h-64 w-full relative">
                 <img
-                    src=""
+                    src="banner"
                     alt="cover"
                     className="w-full h-full object-cover"
                 />
@@ -218,6 +218,7 @@ const ProfilePage = () => {
                                         imageUrl={post.imageUrl}
                                         user={post.user}
                                         likes={post.likes}
+                                        comments={post.comments}
                                     />
                                 ))
                         ) : (

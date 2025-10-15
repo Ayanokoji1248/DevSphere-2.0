@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import usePostStore from "../stores/postStore";
 import { useNavigate } from "react-router-dom";
 
-const PostCard = ({ _id, text, imageUrl, code, link, user, likes }: postProp) => {
+const PostCard = ({ _id, text, imageUrl, code, link, user, likes, comments }: postProp) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +51,7 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes }: postProp) =>
         <div onClick={() => navigate(`/post/${_id}`)} className="w-full bg-black text-white border-y border-zinc-800 p-6 md:px-8 flex gap-4 rounded-lg hover:bg-[#090909] cursor-pointer transition-all duration-300">
             <div className="flex gap-3">
                 <img
-                    className="w-12 h-12 rounded-full object-cover border border-zinc-700"
+                    className="w-10 h-10 rounded-full object-cover border border-zinc-700"
                     src={user.profilePic}
                     alt="profile"
                 />
@@ -60,9 +60,10 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes }: postProp) =>
             <div className="flex-1 flex-col">
                 <div className="flex  justify-between">
                     <div className="flex items-center gap-2 flex-wrap">
-                        <h1 className="font-medium">{user.fullName}</h1>
+                        <h1 className="font-bold tracking-tight">{user.fullName}</h1>
                         <p className="text-sm text-zinc-500">@{user.username}</p>
                     </div>
+
                     <div className="flex justify-between items-start">
 
                         {/* Ellipsis button */}
@@ -74,7 +75,7 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes }: postProp) =>
                                 }}
                                 className="hover:bg-zinc-900 p-2 rounded-full transition"
                             >
-                                <Ellipsis className="text-zinc-400 cursor-pointer" size={18} />
+                                <Ellipsis className="text-zinc-400 cursor-pointer" size={15} />
                             </button>
 
                             {menuOpen && user._id === currentUser?._id && (
@@ -102,7 +103,7 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes }: postProp) =>
                 <div className="flex flex-col gap-4">
 
                     {/* Post Text */}
-                    <p className="text-sm text-zinc-100 font-medium">{text}</p>
+                    <p className="leading-none">{text}</p>
 
                     {/* Link */}
                     {link && (
@@ -151,14 +152,14 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes }: postProp) =>
             )} */}
 
                 {/* Actions */}
-                <div className="flex gap-6 text-zinc-500 mt-2">
+                <div className="flex gap-6 text-zinc-500 mt-4">
                     <div className="flex items-center gap-2 cursor-pointer hover:text-red-500 transition">
                         <Heart size={15} />
                         <span className="text-xs">{likes.length}</span>
                     </div>
                     <div className="flex items-center gap-2 cursor-pointer hover:text-blue-500 transition">
                         <MessageCircle size={15} />
-                        <span className="text-xs">12</span>
+                        <span className="text-xs">{comments.length}</span>
                     </div>
                 </div>
 

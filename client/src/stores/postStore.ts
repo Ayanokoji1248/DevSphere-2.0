@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { postProp } from "../interfaces";
+import type { commentProp, postProp } from "../interfaces";
 import axios from "axios";
 import { BACKEND_URL } from "../utils";
 
@@ -7,7 +7,8 @@ type postStoreType = {
     posts: postProp[],
     fetchAllPost: () => Promise<void>,
     addPost: (text: string, code?: string, link?: string, imageUrl?: string) => Promise<void>
-    deletePost: (postId: string) => Promise<void>
+    deletePost: (postId: string) => Promise<void>,
+    updatePostComment: (postId: string, newComment: commentProp) => void
 }
 
 
@@ -46,7 +47,16 @@ const usePostStore = create<postStoreType>((set) => ({
         } catch (error) {
             console.error(error)
         }
-    }
+    },
+
+    updatePostComment: (postId, newComment) =>
+        set((state) => ({
+            posts: state.posts.map((post) =>
+                post._id === postId
+                    ? { ...post, comments: [...post.comments, newComment] }
+                    : post
+            ),
+        })),
 }))
 
 export default usePostStore

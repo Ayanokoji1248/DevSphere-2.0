@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.route";
 import dbConnect from "./config/dbConnection";
 import postRouter from "./routes/post.route";
 import userRouter from "./routes/user.route";
+import commentRouter from "./routes/comment.route";
 dotenv.config();
 const app = express();
 
@@ -19,7 +20,8 @@ app.use(cors({
 
 app.use('/api/auth', authRouter);
 app.use('/api/post', postRouter);
-app.use('/api/user', userRouter)
+app.use('/api/user', userRouter);
+app.use('/api/comment', commentRouter)
 
 async function main() {
     await dbConnect();

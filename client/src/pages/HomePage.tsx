@@ -114,6 +114,7 @@ const HomePage = () => {
                         link={post.link}
                         user={post.user}
                         likes={post.likes}
+                        comments={post.comments}
                     />
                 ))}
 

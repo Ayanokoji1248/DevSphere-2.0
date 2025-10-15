@@ -19,7 +19,7 @@
 - [X] User Profile and another user profile 
 - [X] supabase integration for image storage performance wise very low
 - [X] use cloudinary for image storage it will be easy and also performance wise
-- [ ] modal and api of comment and comment modal to show in FE
+- [X] modal and api of comment and comment modal to show in FE
 - [ ] other user profile route in FE
 - [ ] Edit user profile 
 - [ ] better ui of create post model 
