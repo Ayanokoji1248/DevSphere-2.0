@@ -34,7 +34,7 @@ const userSchema = new Schema({
         required: true,
         trim: true,
     },
-    headling: {
+    headline: {
         type: String,
         trim: true,
         minLength: [2, "Atleast 2 character"]

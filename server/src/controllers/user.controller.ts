@@ -57,3 +57,42 @@ export const getUser = async (req: Request, res: Response) => {
         return
     }
 }
+
+export const updateUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user.id;
+
+        const { bannerImage, profilePic, fullName, username, headline, bio, address, portfolioLink, skills } = req.body;
+
+        const user = await User.findByIdAndUpdate(userId, {
+            bannerImage,
+            profilePic,
+            fullName,
+            username,
+            headline,
+            bio,
+            address,
+            portfolioLink,
+            skills
+        }, { new: true }).select('-password');
+
+        if (!user) {
+            res.status(404).json({
+                message: "Invalid User"
+            })
+            return
+        }
+
+        res.status(200).json({
+            message: "User Updated successfully",
+            user
+        })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+        return
+    }
+}

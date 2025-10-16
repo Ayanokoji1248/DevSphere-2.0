@@ -71,8 +71,8 @@ const ProfilePage = () => {
             {/* Cover */}
             <div className="h-48 md:h-64 w-full relative">
                 <img
-                    src="banner"
-                    alt="cover"
+                    src={userProfile?.bannerImage}
+                    alt="banner"
                     className="w-full h-full object-cover"
                 />
                 {/* Profile Image */}
@@ -87,7 +87,7 @@ const ProfilePage = () => {
 
             <div className="px-8 mt-16 md:mt-15">
                 {/* Name + Headline */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div className="flex flex-row items-center justify-between">
                     <div>
                         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
                             {userProfile?.fullName}
@@ -96,7 +96,6 @@ const ProfilePage = () => {
                     </div>
                     {userProfile?._id === user?._id &&
                         <button onClick={() => {
-                            console.log("Click");
                             setModal(!modal)
                         }} className="bg-black hover:bg-zinc-900 border border-zinc-600 px-4 py-2 rounded-full text-sm font-medium transition duration-300 cursor-pointer">
                             Edit Profile
@@ -105,9 +104,9 @@ const ProfilePage = () => {
                 </div>
 
                 {/* Headline */}
-                {userProfile?.heading &&
+                {userProfile?.headline &&
                     <p className="mt-2 bg-violet-900/40 px-2 py-1 rounded-full text-xs w-fit text-violet-300 font-medium">
-                        {userProfile?.heading}
+                        {userProfile?.headline}
                     </p>
                 }
 
@@ -172,14 +171,14 @@ const ProfilePage = () => {
                         }
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        {/* {user.skills.map((skill, index) => (
+                        {user?.skills?.map((skill, index) => (
                             <span
                                 key={index}
                                 className="px-2 py-1 bg-blue-900/60 text-blue-400 text-sm rounded-full font-medium"
                             >
                                 {skill}
                             </span>
-                        ))} */}
+                        ))}
 
                         {(userProfile?.skills?.length == 0 || !userProfile?.skills) && <p className="text-zinc-700 text-sm font-medium ">No skills added yet.</p>}
 

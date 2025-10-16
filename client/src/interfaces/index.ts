@@ -4,7 +4,7 @@ export interface userProp {
     username: string,
     bannerImage?: string,
     profilePic?: string,
-    heading?: string,
+    headline?: string,
     bio?: string,
     address?: string,
     portfolioLink?: string,

@@ -9,4 +9,5 @@ const user_controller_1 = require("../controllers/user.controller");
 const userRouter = (0, express_1.Router)();
 userRouter.get('/me', user_middleware_1.default, user_controller_1.currentUser);
 userRouter.get('/:id', user_middleware_1.default, user_controller_1.getUser);
+userRouter.put("/:id", user_middleware_1.default, user_controller_1.updateUser);
 exports.default = userRouter;

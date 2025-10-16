@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = exports.currentUser = void 0;
+exports.updateUser = exports.getUser = exports.currentUser = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const currentUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -63,3 +63,38 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUser = getUser;
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.user.id;
+        const { bannerImage, profilePic, fullName, username, headline, bio, address, portfolioLink, skills } = req.body;
+        const user = yield user_model_1.default.findByIdAndUpdate(userId, {
+            bannerImage,
+            profilePic,
+            fullName,
+            username,
+            headline,
+            bio,
+            address,
+            portfolioLink,
+            skills
+        }, { new: true }).select('-password');
+        if (!user) {
+            res.status(404).json({
+                message: "Invalid User"
+            });
+            return;
+        }
+        res.status(200).json({
+            message: "User Updated successfully",
+            user
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+        return;
+    }
+});
+exports.updateUser = updateUser;
