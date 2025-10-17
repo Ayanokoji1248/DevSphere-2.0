@@ -71,15 +71,15 @@ const HomePage = () => {
                         />
 
                         <div className="flex flex-col sm:flex-row items-stretch gap-2 mt-2">
-                            <button onClick={() => setModal(true)} className="flex-1 border border-zinc-600 rounded-md p-1 hover:bg-blue-700 transition cursor-pointer flex justify-center items-center gap-2">
+                            <button onClick={() => setModal(true)} className="flex-1 border border-zinc-600 rounded-md p-2 hover:bg-zinc-900 transition cursor-pointer flex justify-center items-center gap-2">
                                 <Link size={18} />
                                 <span className="text-sm font-medium">Link</span>
                             </button>
-                            <button onClick={() => setModal(true)} className="flex-1 border border-zinc-600 rounded-md p-1 hover:bg-blue-700 transition cursor-pointer flex justify-center items-center gap-2">
+                            <button onClick={() => setModal(true)} className="flex-1 border border-zinc-600 rounded-md p-2 hover:bg-zinc-900 transition cursor-pointer flex justify-center items-center gap-2">
                                 <Image size={18} />
                                 <span className="text-sm font-medium">Media</span>
                             </button>
-                            <button onClick={() => setModal(true)} className="flex-1 border border-zinc-600 rounded-md p-1 hover:bg-blue-700 transition cursor-pointer flex justify-center items-center gap-2">
+                            <button onClick={() => setModal(true)} className="flex-1 border border-zinc-600 rounded-md p-2 hover:bg-zinc-900 transition cursor-pointer flex justify-center items-center gap-2">
                                 <Code size={18} />
                                 <span className="text-sm font-medium">Code</span>
                             </button>

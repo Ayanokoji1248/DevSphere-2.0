@@ -60,8 +60,14 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes, comments }: po
             <div className="flex-1 flex-col">
                 <div className="flex  justify-between">
                     <div className="flex items-center gap-2 flex-wrap">
-                        <h1 className="font-bold tracking-tight">{user.fullName}</h1>
-                        <p className="text-sm text-zinc-500">@{user.username}</p>
+                        <h1 onClick={(e) => {
+                            e.stopPropagation()
+                            navigate(`/user/${user._id}`)
+                        }} className="font-bold tracking-tight">{user.fullName}</h1>
+                        <p onClick={(e) => {
+                            e.stopPropagation()
+                            navigate(`/user/${user._id}`)
+                        }} className="text-sm text-zinc-500">@{user.username}</p>
                     </div>
 
                     <div className="flex justify-between items-start">

@@ -90,21 +90,25 @@ const CreatePostModal = ({ setModal }: modalProp) => {
 
     return createPortal(
         <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center">
-            <div className="bg-zinc-900 p-6 rounded-lg w-full max-w-lg relative">
+            <div className="bg-zinc-950 rounded-xl shadow-xl w-full max-w-lg p-6 relative overflow-y-auto max-h-[90vh] scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900 border border-zinc-800">
+
                 {/* Close Button */}
                 <button
                     onClick={() => setModal(false)}
-                    className="absolute top-4 right-4 text-zinc-400 hover:text-white p-2 hover:bg-zinc-950 rounded-full transition duration-300 cursor-pointer"
+                    className="absolute top-4 right-4 p-2 rounded-full hover:bg-zinc-900 text-zinc-400 hover:text-white transition duration-300 cursor-pointer"
                 >
                     <X size={20} />
                 </button>
 
-                <h2 className="text-xl font-semibold mb-4 text-white">Create Post</h2>
+                {/* Header */}
+                <h2 className="text-2xl font-semibold text-white mb-5">Create Post</h2>
 
-                <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-                    {/* Text */}
+                {/* Form */}
+                <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+
+                    {/* Post Text */}
                     <div className="flex flex-col">
-                        <label htmlFor="text" className="text-sm text-zinc-300 mb-1">
+                        <label htmlFor="text" className="text-sm text-zinc-400 mb-1 font-medium">
                             Post Text
                         </label>
                         <textarea
@@ -112,43 +116,43 @@ const CreatePostModal = ({ setModal }: modalProp) => {
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             placeholder="What's on your mind?"
-                            className="w-full bg-zinc-800 min-h-24 resize-none text-white p-2 rounded focus:outline-none"
+                            className="w-full bg-zinc-900 border border-zinc-700 text-white p-3 rounded-md resize-none focus:outline-none focus:border-violet-500 transition min-h-[80px]"
                             required
                         />
                     </div>
 
-                    {/* Code */}
+                    {/* Code Snippet */}
                     <div className="flex flex-col">
-                        <label htmlFor="code" className="text-sm text-zinc-300 mb-1">
-                            Code Snippet
+                        <label htmlFor="code" className="text-sm text-zinc-400 mb-1 font-medium">
+                            Code Snippet (Optional)
                         </label>
                         <textarea
                             id="code"
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
-                            placeholder="Add code snippet (optional)"
-                            className="w-full bg-zinc-800 min-h-32 resize-none text-white p-2 rounded focus:outline-none"
+                            placeholder="Add code snippet"
+                            className="w-full bg-zinc-900 border border-zinc-700 text-white p-3 rounded-md resize-none focus:outline-none focus:border-violet-500 transition min-h-[120px]"
                         />
                     </div>
 
                     {/* Link */}
                     <div className="flex flex-col">
-                        <label htmlFor="link" className="text-sm text-zinc-300 mb-1">
-                            Link
+                        <label htmlFor="link" className="text-sm text-zinc-400 mb-1 font-medium">
+                            Link (Optional)
                         </label>
                         <input
                             id="link"
                             type="url"
                             value={link}
                             onChange={(e) => setLink(e.target.value)}
-                            placeholder="Add a link (optional)"
-                            className="w-full bg-zinc-800 text-white p-2 rounded focus:outline-none"
+                            placeholder="Add a link"
+                            className="w-full bg-zinc-900 border border-zinc-700 text-white p-3 rounded-md focus:outline-none focus:border-violet-500 transition"
                         />
                     </div>
 
                     {/* Image */}
                     <div className="flex flex-col">
-                        <label htmlFor="image" className="text-sm text-zinc-300 mb-1">
+                        <label htmlFor="image" className="text-sm text-zinc-400 mb-1 font-medium">
                             Upload Image
                         </label>
                         <input
@@ -162,21 +166,26 @@ const CreatePostModal = ({ setModal }: modalProp) => {
                             <img
                                 src={imagePreview}
                                 alt="preview"
-                                className="w-32 h-32 object-cover rounded mt-2"
+                                className="w-32 h-32 object-cover rounded-md mt-2 border border-zinc-700"
                             />
                         )}
                     </div>
 
+                    {/* Submit Button */}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="bg-violet-600 hover:bg-violet-700 text-white py-2 px-4 rounded transition"
+                        className={`w-full py-2 rounded-md font-medium transition ${loading
+                                ? "bg-violet-700 text-gray-300 cursor-not-allowed"
+                                : "bg-violet-600 hover:bg-violet-700 text-white"
+                            }`}
                     >
                         {loading ? "Posting..." : "Post"}
                     </button>
                 </form>
             </div>
-        </div>,
+        </div>
+        ,
         root
     );
 };

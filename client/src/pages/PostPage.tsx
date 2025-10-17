@@ -135,9 +135,15 @@ const PostPage = () => {
                         <div className="flex justify-between">
 
                             <div className="flex items-center gap-2 flex-wrap">
-                                <h1 className="font-bold tracking-tight">{post?.user.fullName}</h1>
+                                <h1 onClick={(e) => {
+                                    e.stopPropagation()
+                                    navigate(`/user/${post.user._id}`)
+                                }} className="font-bold tracking-tight cursor-pointer">{post?.user.fullName}</h1>
 
-                                <p className="text-sm text-zinc-500">@{post?.user.username}</p>
+                                <p onClick={(e) => {
+                                    e.stopPropagation()
+                                    navigate(`/user/${post.user._id}`)
+                                }} className="text-sm text-zinc-500 cursor-pointer">@{post?.user.username}</p>
                             </div>
 
                             <div className="flex justify-between items-start">

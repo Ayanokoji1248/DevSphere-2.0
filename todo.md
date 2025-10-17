@@ -21,9 +21,9 @@
 - [X] use cloudinary for image storage it will be easy and also performance wise
 - [X] modal and api of comment and comment modal to show in FE
 - [ ] other user profile route in FE
-- [ ] Edit user profile 
-- [ ] better ui of create post model 
-- [ ] resturcture the html of post page
+- [X] Edit user profile 
+- [X] better ui of create post model 
+- [X] resturcture the html of post page
 - [ ] add navigation bar with responsive
 
 

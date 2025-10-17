@@ -108,6 +108,10 @@ const ProfilePage = () => {
                             Edit Profile
                         </button>
                     }
+                    {
+                        userProfile?._id !== user?._id &&
+                        <button onClick={() => alert("Follow")} className="bg-fuchsia-600 p-2 py-1 rounded-md text-sm font-medium cursor-pointer hover:bg-fuchsia-700 transition-all duration-300">Follow</button>
+                    }
                 </div>
 
                 {/* Headline */}
@@ -164,7 +168,7 @@ const ProfilePage = () => {
 
                 {/* Skills */}
                 <div className="mt-5">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
                             <CodeXml className="text-blue-400" size={20} />
                             <h2 className="font-semibold text-lg">Skills & Technologies</h2>
