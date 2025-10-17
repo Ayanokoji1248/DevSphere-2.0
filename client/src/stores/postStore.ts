@@ -9,6 +9,7 @@ type postStoreType = {
     addPost: (text: string, code?: string, link?: string, imageUrl?: string) => Promise<void>
     deletePost: (postId: string) => Promise<void>,
     updatePostComment: (postId: string, newComment: commentProp) => void
+    updateUserProfilePic: (userId: string, newProfilePic: string) => void
 }
 
 
@@ -49,14 +50,21 @@ const usePostStore = create<postStoreType>((set) => ({
         }
     },
 
-    updatePostComment: (postId, newComment) =>
+    updatePostComment: (postId, newComment) => {
         set((state) => ({
             posts: state.posts.map((post) =>
                 post._id === postId
                     ? { ...post, comments: [...post.comments, newComment] }
                     : post
             ),
-        })),
+        }))
+    },
+    updateUserProfilePic: (userId, newProfilePic) => {
+        set((state) => ({
+            posts: state.posts.map((post) => post.user._id === userId ? { ...post, user: { ...post.user, profilePic: newProfilePic } } : post)
+        }))
+    }
+
 }))
 
 export default usePostStore

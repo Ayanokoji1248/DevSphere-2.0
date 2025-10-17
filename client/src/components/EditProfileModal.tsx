@@ -4,6 +4,7 @@ import useUserStore from "../stores/userStore";
 import { useRef, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../utils";
+import usePostStore from "../stores/postStore";
 
 interface modalProp {
     setModal: (modal: boolean) => void
@@ -12,6 +13,8 @@ interface modalProp {
 const EditProfileModal = ({ setModal }: modalProp) => {
 
     const root = document.getElementById("main") as HTMLElement;
+
+    const { updateUserProfilePic } = usePostStore()
 
     const { user, setUser } = useUserStore()
     const [loading, setLoading] = useState(false)
@@ -25,8 +28,12 @@ const EditProfileModal = ({ setModal }: modalProp) => {
     const [skill, setSkill] = useState("");
     const [skills, setSkills] = useState(user?.skills);
 
+    const [bannerPreview, setBannerPreview] = useState<string | null>(user?.bannerImage || null);
     const [bannerImage, setBannerImage] = useState<string | null>(user?.bannerImage || null);
+
+    const [profilePreview, setProfilePreview] = useState<string | null>(user?.profilePic || null);
     const [profilePic, setProfilePic] = useState<string | null>(user?.profilePic || null);
+
 
     const bannerImageRef = useRef<HTMLInputElement>(null);
     const profilePicRef = useRef<HTMLInputElement>(null);
@@ -60,10 +67,10 @@ const EditProfileModal = ({ setModal }: modalProp) => {
         const file = e.target.files?.[0];
         if (file) {
             const previewURL = URL.createObjectURL(file);
-            setBannerImage(previewURL); // show preview immediately
+            setBannerPreview(previewURL); // show preview immediately
 
-            const uploadedURL = await uploadToCloudinary(file); // upload to Cloudinary
-            if (uploadedURL) setBannerImage(uploadedURL); // replace with uploaded image URL
+            const uploadedUrl = await uploadToCloudinary(file);
+            if (uploadedUrl) setBannerImage(uploadedUrl);
         }
     };
 
@@ -71,10 +78,10 @@ const EditProfileModal = ({ setModal }: modalProp) => {
         const file = e.target.files?.[0];
         if (file) {
             const previewURL = URL.createObjectURL(file);
-            setProfilePic(previewURL);
+            setProfilePreview(previewURL);
 
-            const uploadedURL = await uploadToCloudinary(file);
-            if (uploadedURL) setProfilePic(uploadedURL);
+            const uploadedUrl = await uploadToCloudinary(file);
+            if (uploadedUrl) setProfilePic(uploadedUrl);
         }
     };
 
@@ -97,8 +104,8 @@ const EditProfileModal = ({ setModal }: modalProp) => {
                 skills
             }, { withCredentials: true });
 
-            console.log(response.data)
             setUser(response.data.user)
+            updateUserProfilePic(user?._id as string, profilePic as string)
         } catch (error) {
             console.error(error)
         } finally {
@@ -108,111 +115,188 @@ const EditProfileModal = ({ setModal }: modalProp) => {
     }
 
     return createPortal(
-        <div className="w-full min-h-screen bg-zinc-950/70 fixed inset-0 z-[99999] flex justify-center items-center">
-
-            <div className='w-[500px] max-h-[600px] bg-zinc-950 shadow-zinc-800 shadow-[2px_2px_15px_5px] rounded-xl text-white scrollbar-thumb-white scrollbar-thin scrollbar-track-zinc-950 overflow-y-scroll'>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
+            <div className="w-full max-w-lg max-h-[90vh] bg-zinc-950 rounded-xl shadow-xl text-white overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
 
                 {/* Modal Header */}
-                <div className="p-4 px-5 flex items-center justify-between sticky top-0 z-10 bg-black">
-                    <div className="flex items-center gap-2">
-                        <button onClick={() => setModal(false)} className="p-1 hover:bg-zinc-800 transition-all duration-300 cursor-pointer rounded-full">
+                <div className="sticky top-0 bg-zinc-900/95 backdrop-blur-md px-5 py-3 flex justify-between items-center border-b border-zinc-800 z-10">
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => setModal(false)}
+                            className="p-2 rounded-full hover:bg-zinc-800 transition"
+                        >
                             <X size={22} />
                         </button>
-                        <h1 className="text-xl font-semibold">Edit Profile</h1>
+                        <h2 className="text-xl font-semibold">Edit Profile</h2>
                     </div>
-                    <button onClick={handleSubmit} className="font-medium bg-white text-black px-4 py-1 rounded-full text-sm hover:bg-slate-300 transition-all duration-300 cursor-pointer">
-                        {loading ? "Saving" : "Save"}
+                    <button
+                        onClick={handleSubmit}
+                        className={`px-4 py-1 rounded-full font-medium transition ${loading
+                                ? "bg-zinc-700 text-gray-300 cursor-not-allowed"
+                                : "bg-white text-black hover:bg-gray-200"
+                            }`}
+                    >
+                        {loading ? "Saving..." : "Save"}
                     </button>
                 </div>
 
-                {/* Modal Content */}
-                <div className="mt-4 px-5 flex flex-col gap-4">
+                {/* Modal Body */}
+                <div className="px-5 py-6 flex flex-col gap-6">
 
-                    {/* Cover Image */}
-                    <div className="w-full relative">
-                        <button onClick={() => bannerImageRef.current?.click()} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 bg-white/50 rounded-full text-black cursor-pointer transition-all duration-300">
-                            <Edit size={20} />
-
-                        </button>
-                        <input onChange={handleBannerChange} ref={bannerImageRef} type="file" className="hidden" />
+                    {/* Banner */}
+                    <div className="relative w-full h-52 rounded-lg overflow-hidden bg-zinc-800/50 flex items-center justify-center cursor-pointer hover:bg-zinc-700/70 transition">
                         <img
-                            className="w-full h-52 object-cover rounded-md"
-                            src={bannerImage || user?.bannerImage}
+                            src={bannerPreview || user?.bannerImage}
                             alt="banner"
+                            className="w-full h-full object-cover"
                         />
+                        <button
+                            onClick={() => bannerImageRef.current?.click()}
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 bg-white/60 rounded-full text-black hover:bg-white transition"
+                        >
+                            <Edit size={20} />
+                        </button>
+                        <input
+                            type="file"
+                            ref={bannerImageRef}
+                            onChange={handleBannerChange}
+                            className="hidden"
+                        />
+                    </div>
 
-                        {/* Profile Image */}
-                        <div className="absolute -bottom-10 left-5 w-24 h-24 border border-zinc-500 rounded-full overflow-hidden">
-                            <img
-                                className="w-full h-full object-cover"
-                                src={profilePic || user?.profilePic}
-                                alt="profile"
-                            />
-                            <button onClick={() => { profilePicRef.current?.click() }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-2 bg-white/50 rounded-full text-black cursor-pointer transition-all duration-300">
-                                <Edit size={15} />
-                            </button>
-                            <input ref={profilePicRef} onChange={handleProfileChange} type="file" className="hidden" />
-                        </div>
+                    {/* Profile Picture */}
+                    <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-zinc-600 -mt-14 ml-5">
+                        <img
+                            src={profilePreview || user?.profilePic}
+                            alt="profile"
+                            className="w-full h-full object-cover"
+                        />
+                        <button
+                            onClick={() => profilePicRef.current?.click()}
+                            className="absolute bottom-1 right-1 p-2 bg-white/70 rounded-full hover:bg-white transition"
+                        >
+                            <Edit size={16} />
+                        </button>
+                        <input
+                            type="file"
+                            ref={profilePicRef}
+                            onChange={handleProfileChange}
+                            className="hidden"
+                        />
                     </div>
 
                     {/* Form */}
-                    <div className="mt-15 flex flex-col gap-4 pb-5">
+                    <div className="flex flex-col gap-4 mt-6">
 
-                        <div>
-                            <label className="font-semibold text-sm text-zinc-400">Full Name</label>
-                            <input value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full p-2 text-sm outline-none border border-zinc-500 rounded-md" type="text" placeholder="Krish Prajapati" />
-                        </div>
-
-                        <div>
-                            <label className="font-semibold text-sm text-zinc-400">Username</label>
-                            <input value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 text-sm outline-none border border-zinc-500 rounded-md" type="text" placeholder="@crish1248" />
-                        </div>
-
-                        <div>
-                            <label className="font-semibold text-sm text-zinc-400">Headline</label>
-                            <input value={headline} onChange={(e) => setHeadline(e.target.value)} className="w-full p-2 text-sm outline-none border border-zinc-500 rounded-md" type="text" placeholder="Full Stack Developer" />
-                        </div>
-
-                        <div>
-                            <label className="font-semibold text-sm text-zinc-400">Description / Bio</label>
-                            <textarea value={bio} onChange={(e) => setBio(e.target.value)} className="w-full p-2 text-sm outline-none border border-zinc-500 rounded-md resize-none" rows={3} placeholder="Building beautiful web apps and exploring creative tech 🌐✨"></textarea>
-                        </div>
-
-                        <div>
-                            <label className="font-semibold text-sm text-zinc-400">Website</label>
-                            <input value={portfolioLink} onChange={(e) => setPortfolioLink(e.target.value)} className="w-full p-2 text-sm outline-none border border-zinc-500 rounded-md" type="url" placeholder="https://krishdevs.vercel.app" />
-                        </div>
-
-                        <div>
-                            <label className="font-semibold text-sm text-zinc-400">Location</label>
-                            <input value={address} onChange={(e) => setAddress(e.target.value)} className="w-full p-2 text-sm outline-none border border-zinc-500 rounded-md" type="text" placeholder="Ahmedabad, India" />
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                            <div className="flex flex-col">
-                                <label className="font-semibold text-sm text-zinc-400">Skills</label>
-                                <div className="flex gap-2">
-                                    <input value={skill} onChange={(e) => setSkill(e.target.value)} type="text" className="w-full p-2 text-sm outline-none border border-zinc-500 rounded-md" placeholder="Add your skills" />
-                                    <button onClick={handleSkills} className="bg-zinc-800 px-2 rounded-md cursor-pointer hover:bg-zinc-900 transition-all duration-300"><Plus /></button>
-                                </div>
+                        {/* Full Name & Username */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm text-zinc-400 mb-1 font-semibold">Full Name</label>
+                                <input
+                                    type="text"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    placeholder="Krish Prajapati"
+                                    className="w-full p-2 rounded-md bg-zinc-900 border border-zinc-700 outline-none focus:border-blue-500 transition"
+                                />
                             </div>
-                            <div className="flex flex-wrap gap-2 mt-1">
+                            <div>
+                                <label className="block text-sm text-zinc-400 mb-1 font-semibold">Username</label>
+                                <input
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder="@krish1248"
+                                    className="w-full p-2 rounded-md bg-zinc-900 border border-zinc-700 outline-none focus:border-blue-500 transition"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Headline */}
+                        <div>
+                            <label className="block text-sm text-zinc-400 mb-1 font-semibold">Headline</label>
+                            <input
+                                type="text"
+                                value={headline}
+                                onChange={(e) => setHeadline(e.target.value)}
+                                placeholder="Full Stack Developer"
+                                className="w-full p-2 rounded-md bg-zinc-900 border border-zinc-700 outline-none focus:border-blue-500 transition"
+                            />
+                        </div>
+
+                        {/* Bio */}
+                        <div>
+                            <label className="block text-sm text-zinc-400 mb-1 font-semibold">Description / Bio</label>
+                            <textarea
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                                rows={3}
+                                placeholder="Building beautiful web apps and exploring creative tech 🌐✨"
+                                className="w-full p-2 rounded-md bg-zinc-900 border border-zinc-700 outline-none focus:border-blue-500 transition resize-none"
+                            />
+                        </div>
+
+                        {/* Portfolio & Location */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm text-zinc-400 mb-1 font-semibold">Website</label>
+                                <input
+                                    type="url"
+                                    value={portfolioLink}
+                                    onChange={(e) => setPortfolioLink(e.target.value)}
+                                    placeholder="https://krishdevs.vercel.app"
+                                    className="w-full p-2 rounded-md bg-zinc-900 border border-zinc-700 outline-none focus:border-blue-500 transition"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm text-zinc-400 mb-1 font-semibold">Location</label>
+                                <input
+                                    type="text"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    placeholder="Ahmedabad, India"
+                                    className="w-full p-2 rounded-md bg-zinc-900 border border-zinc-700 outline-none focus:border-blue-500 transition"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Skills */}
+                        <div className="flex flex-col gap-2">
+                            <label className="block text-sm text-zinc-400 font-semibold">Skills</label>
+                            <div className="flex gap-2">
+                                <input
+                                    value={skill}
+                                    onChange={(e) => setSkill(e.target.value)}
+                                    placeholder="Add your skills"
+                                    className="flex-1 p-2 rounded-md bg-zinc-900 border border-zinc-700 outline-none focus:border-blue-500 transition"
+                                />
+                                <button
+                                    onClick={handleSkills}
+                                    className="px-3 rounded-md bg-blue-700 hover:bg-blue-800 transition"
+                                >
+                                    <Plus />
+                                </button>
+                            </div>
+                            <div className="flex flex-wrap gap-2 mt-2">
                                 {skills?.map((skill, idx) => (
-                                    <span className="px-2 py-1 bg-blue-900/60 text-blue-400 text-sm rounded-full font-medium flex items-center gap-1">
+                                    <span
+                                        key={idx}
+                                        className="flex items-center gap-1 px-3 py-1 rounded-full bg-blue-900/60 text-blue-400 text-sm font-medium"
+                                    >
                                         {skill}
-                                        <button onClick={() => handleSkillDelete(idx)} className="cursor-pointer">
-                                            <X className="text-red-500" size={15} />
+                                        <button onClick={() => handleSkillDelete(idx)}>
+                                            <X size={14} className="text-red-400 hover:text-red-500 transition" />
                                         </button>
                                     </span>
                                 ))}
-
                             </div>
                         </div>
 
                     </div>
                 </div>
             </div>
-        </div>,
+        </div>
+        ,
         root
     );
 };

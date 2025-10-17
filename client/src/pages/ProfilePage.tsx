@@ -62,6 +62,13 @@ const ProfilePage = () => {
 
     }, [id])
 
+    useEffect(() => {
+        if (id === user?._id && user) {
+            setUserProfile(user);
+        }
+    }, [user, id]);
+
+
     return (
         <div className="min-h-screen bg-zinc-950 text-white">
 
