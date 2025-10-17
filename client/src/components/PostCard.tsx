@@ -12,7 +12,7 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes, comments }: po
 
     const { user: currentUser } = useUserStore()
 
-    const { deletePost } = usePostStore()
+    const { deletePost, likePost, unlikePost } = usePostStore()
 
     const navigate = useNavigate()
 
@@ -46,6 +46,13 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes, comments }: po
             setMenuOpen(false);
         }
     };
+
+    const isLiked = likes.includes(currentUser?._id as string)
+    const handleLikeToggle = () => {
+        if (!user) return
+        if (isLiked) unlikePost(_id, currentUser?._id as string);
+        else likePost(_id, currentUser?._id as string)
+    }
 
     return (
         <div onClick={() => navigate(`/post/${_id}`)} className="w-full bg-black text-white border-y border-zinc-800 p-6 md:px-8 flex gap-4 rounded-lg hover:bg-[#090909] cursor-pointer transition-all duration-300">
@@ -159,7 +166,14 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes, comments }: po
 
                 {/* Actions */}
                 <div className="flex gap-6 text-zinc-500 mt-4">
-                    <div className="flex items-center gap-2 cursor-pointer hover:text-red-500 transition">
+                    <div
+                        className={`flex items-center gap-2 cursor-pointer transition ${isLiked ? "text-red-500" : "text-zinc-500 hover:text-red-500"
+                            }`}
+                        onClick={(e) => {
+                            e.stopPropagation(); // prevent navigating to post
+                            handleLikeToggle();
+                        }}
+                    >
                         <Heart size={15} />
                         <span className="text-xs">{likes.length}</span>
                     </div>

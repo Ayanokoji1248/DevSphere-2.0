@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePost = exports.getPost = exports.allPosts = exports.createPost = void 0;
+exports.unlikePost = exports.likePost = exports.deletePost = exports.getPost = exports.allPosts = exports.createPost = void 0;
 const post_model_1 = __importDefault(require("../models/post.model"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -119,3 +119,74 @@ const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deletePost = deletePost;
+const likePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const postId = req.params.id;
+        const userId = req.user.id;
+        const objectUserId = new mongoose_1.default.Types.ObjectId(userId);
+        const post = yield post_model_1.default.findById(postId);
+        if (!post) {
+            res.status(404).json({
+                message: "Post Not Found"
+            });
+            return;
+        }
+        const alreadyLike = post.likes.some(id => id.equals(objectUserId));
+        if (alreadyLike) {
+            res.status(200).json({
+                message: "Already Like"
+            });
+            return;
+        }
+        post.likes.push(objectUserId);
+        yield post.save();
+        res.status(200).json({
+            message: "Post Like Successfully",
+            likes: post.likes.length
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+        return;
+    }
+});
+exports.likePost = likePost;
+const unlikePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const postId = req.params.id;
+        const userId = req.user.id;
+        const objectUserId = new mongoose_1.default.Types.ObjectId(userId);
+        const post = yield post_model_1.default.findById(postId);
+        if (!post) {
+            res.status(404).json({
+                message: "Post Not Found"
+            });
+            return;
+        }
+        const alreadyLike = post.likes.some(id => id.equals(objectUserId));
+        if (!alreadyLike) {
+            res.status(400).json({
+                message: "You haven't liked this post yet"
+            });
+            return;
+        }
+        post.likes = post.likes.filter(id => !id.equals(objectUserId));
+        yield post.save();
+        res.status(200).json({
+            message: "Post Unliked successfully",
+            likes: post.likes.length
+        });
+        return;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+        return;
+    }
+});
+exports.unlikePost = unlikePost;

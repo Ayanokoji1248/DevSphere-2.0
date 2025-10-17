@@ -115,3 +115,87 @@ export const deletePost = async (req: Request, res: Response) => {
         return
     }
 }
+
+export const likePost = async (req: Request, res: Response) => {
+    try {
+
+        const postId = req.params.id;
+        const userId = req.user.id;
+        const objectUserId = new mongoose.Types.ObjectId(userId as string)
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            res.status(404).json({
+                message: "Post Not Found"
+            })
+            return
+        }
+
+        const alreadyLike = post.likes.some(id => id.equals(objectUserId))
+
+        if (alreadyLike) {
+            res.status(200).json({
+                message: "Already Like"
+            })
+            return
+        }
+        post.likes.push(objectUserId)
+
+        await post.save();
+        res.status(200).json({
+            message: "Post Like Successfully",
+            likes: post.likes.length
+        })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+        return
+    }
+}
+
+export const unlikePost = async (req: Request, res: Response) => {
+    try {
+        const postId = req.params.id;
+        const userId = req.user.id;
+        const objectUserId = new mongoose.Types.ObjectId(userId as string)
+
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            res.status(404).json({
+                message: "Post Not Found"
+            })
+            return
+        }
+
+        const alreadyLike = post.likes.some(id => id.equals(objectUserId));
+
+        if (!alreadyLike) {
+            res.status(400).json({
+                message: "You haven't liked this post yet"
+            })
+            return
+        }
+
+        post.likes = post.likes.filter(id => !id.equals(objectUserId));
+
+        await post.save();
+
+        res.status(200).json({
+            message: "Post Unliked successfully",
+            likes: post.likes.length
+        })
+        return
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+        return
+    }
+}

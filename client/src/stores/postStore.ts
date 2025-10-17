@@ -10,6 +10,10 @@ type postStoreType = {
     deletePost: (postId: string) => Promise<void>,
     updatePostComment: (postId: string, newComment: commentProp) => void
     updateUserProfilePic: (userId: string, newProfilePic: string) => void
+
+    likePost: (postId: string, userId: string) => Promise<void>
+    unlikePost: (postId: string, userId: string) => Promise<void>
+    updateLike: (postId: string, userId: string) => void
 }
 
 
@@ -63,6 +67,55 @@ const usePostStore = create<postStoreType>((set) => ({
         set((state) => ({
             posts: state.posts.map((post) => post.user._id === userId ? { ...post, user: { ...post.user, profilePic: newProfilePic } } : post)
         }))
+    },
+
+    likePost: async (postId, userId) => {
+        try {
+            set((state) => ({
+                posts: state.posts.map((post) => post._id === postId ? { ...post, likes: [...post.likes, userId] } : post)
+            }));
+
+            await axios.put(`${BACKEND_URL}/post/${postId}/like`, {}, { withCredentials: true })
+
+        } catch (error) {
+            console.error(error);
+            set((state) => ({
+                posts: state.posts.map((post) => post._id === postId ? { ...post, likes: post.likes.filter(id => id !== userId) } : post)
+            }))
+        }
+    },
+    unlikePost: async (postId, userId) => {
+        try {
+            set((state) => ({
+                posts: state.posts.map((post) => post._id === postId ? { ...post, likes: post.likes.filter(id => id !== userId) } : post)
+            }))
+
+
+            await axios.put(`${BACKEND_URL}/post/${postId}/like`, {}, { withCredentials: true })
+        } catch (error) {
+            console.error(error);
+            set((state) => ({
+                posts: state.posts.map((post) => post._id === postId ? { ...post, likes: [...post.likes, userId] } : post)
+            }))
+        }
+    },
+
+    updateLike: (postId, userId) => {
+        set((state) => {
+            const postIndex = state.posts.findIndex(p => p._id === postId);
+            if (postIndex === -1) return state;
+
+            const post = state.posts[postIndex];
+            const isLiked = post.likes.includes(userId);
+
+            const updatePost = {
+                ...post,
+                likes: isLiked ? post.likes.filter(id => id !== userId)
+                    : [...post.likes, userId]
+            }
+            state.posts[postIndex] = updatePost
+            return { posts: [...state.posts] }
+        })
     }
 
 }))

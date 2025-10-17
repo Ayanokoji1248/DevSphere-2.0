@@ -23,7 +23,7 @@ export interface postProp {
         profilePic: string,
         username: string
     },
-    likes: userProp[],
+    likes: string[],
     comments: commentProp[]
 }
 

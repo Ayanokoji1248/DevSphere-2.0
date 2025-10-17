@@ -11,4 +11,6 @@ postRouter.post('/create', user_middleware_1.default, post_controller_1.createPo
 postRouter.get('/all', user_middleware_1.default, post_controller_1.allPosts);
 postRouter.get('/:id', user_middleware_1.default, post_controller_1.getPost);
 postRouter.delete("/:id", user_middleware_1.default, post_controller_1.deletePost);
+postRouter.put('/:id/like', user_middleware_1.default, post_controller_1.likePost);
+postRouter.put('/:id/unlike', user_middleware_1.default, post_controller_1.unlikePost);
 exports.default = postRouter;

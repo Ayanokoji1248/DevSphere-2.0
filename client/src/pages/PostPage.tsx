@@ -13,10 +13,10 @@ import CommentCard from "../components/CommentCard"
 const PostPage = () => {
 
     const { id } = useParams()
-    const [post, setPost] = useState<postProp>()
 
     const { user: currentUser } = useUserStore()
-    const { deletePost, updatePostComment } = usePostStore()
+    const { deletePost, updatePostComment, likePost, unlikePost, posts } = usePostStore()
+    const [post, setPost] = useState<postProp>()
     const navigate = useNavigate()
 
     const [menuOpen, setMenuOpen] = useState(false);
@@ -104,6 +104,39 @@ const PostPage = () => {
         fetchComment()
         getPost()
     }, [id])
+
+    const handleLikeToggle = async () => {
+        if (!post || !currentUser?._id) return;
+
+        const userId = currentUser._id;
+        const isLiked = post.likes.includes(userId);
+
+        // Optimistic update
+        setPost(prev => prev ? {
+            ...prev,
+            likes: isLiked
+                ? prev.likes.filter(id => id !== userId) // unlike
+                : [...prev.likes, userId]                // like
+        } : prev);
+
+        try {
+            if (isLiked) {
+                await unlikePost(post._id, userId);
+            } else {
+                await likePost(post._id, userId);
+            }
+        } catch (err) {
+            console.error(err);
+            // Revert if failed
+            setPost(prev => prev ? {
+                ...prev,
+                likes: isLiked
+                    ? [...prev.likes, userId]
+                    : prev.likes.filter(id => id !== userId)
+            } : prev);
+            toast.error("Failed to update like");
+        }
+    };
 
     if (postLoading || commentLoading) return (<div>
         <Spinner />
@@ -231,9 +264,17 @@ const PostPage = () => {
 
                         {/* Actions */}
                         <div className="flex gap-6 text-zinc-400 mt-4">
-                            <div className="flex items-center gap-2 cursor-pointer hover:text-red-500 transition">
-                                <Heart size={18} />
-                                <span className="text-sm">{post.likes.length}</span>
+                            <div
+                                className={`flex items-center gap-2 cursor-pointer transition ${post.likes.includes(currentUser?._id as string) ? "text-red-500" : "text-zinc-500 hover:text-red-500"
+                                    }`}
+                                onClick={(e) => {
+                                    e.stopPropagation(); // prevent navigating to post
+                                    console.log("Like")
+                                    handleLikeToggle();
+                                }}
+                            >
+                                <Heart size={15} />
+                                <span className="text-xs">{post.likes.length}</span>
                             </div>
                             <div className="flex items-center gap-2 cursor-pointer hover:text-blue-500 transition">
                                 <MessageCircle size={18} />
