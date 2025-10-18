@@ -15,7 +15,7 @@ const PostPage = () => {
     const { id } = useParams()
 
     const { user: currentUser } = useUserStore()
-    const { deletePost, updatePostComment, likePost, unlikePost, posts } = usePostStore()
+    const { deletePost, updatePostComment, likePost, unlikePost } = usePostStore()
     const [post, setPost] = useState<postProp>()
     const navigate = useNavigate()
 

@@ -16,36 +16,11 @@ const ProfilePage = () => {
 
     const { id } = useParams()
     const [userProfile, setUserProfile] = useState<userProp>();
-    const { user } = useUserStore()
+    const { user, followUser, unfollowUser } = useUserStore();
+    const alreadyFollow = id && user?.following?.includes(id)
 
     const { posts } = usePostStore()
-    // Mock user data
-    // const user = {
-    //     fullName: "Krish Prajapati",
-    //     username: "crish1248",
-    //     headline: "Full Stack Developer",
-    //     bio: "Building beautiful web apps and exploring creative tech 🌐✨",
-    //     address: "Ahmedabad, India",
-    //     portfolioLink: "https://krishdevs.vercel.app",
-    //     followerCount: 145,
-    //     followingCount: 89,
-    //     projects: [
-    //         { name: "Nomad Navigator" },
-    //         { name: "SQLify" },
-    //         { name: "DevLink" },
-    //     ],
-    //     posts: [
-    //         { content: "Just deployed my new project 🚀 #React #MERN" },
-    //         { content: "Experimenting with Zustand and Zustand Persist 🔥" },
-    //     ],
-    //     skills: ["React", "Node.js", "Express", "MongoDB", "TypeScript"],
-    //     profileImg:
-    //         "https://i.pinimg.com/1200x/00/80/fc/0080fcbb036ac608f882c656509ea355.jpg",
-    //     bannerImg:
-    //         "https://i.pinimg.com/736x/e4/09/bf/e409bf64dc35dfedac8feb356f9124a5.jpg",
-    // };
 
-    // compute post count for the profile being viewed (userProfile) safely
     const userPost = posts.filter((post) => post?.user?._id === userProfile?._id).length
 
     useEffect(() => {
@@ -110,7 +85,7 @@ const ProfilePage = () => {
                     }
                     {
                         userProfile?._id !== user?._id &&
-                        <button onClick={() => alert("Follow")} className="bg-fuchsia-600 p-2 py-1 rounded-md text-sm font-medium cursor-pointer hover:bg-fuchsia-700 transition-all duration-300">Follow</button>
+                        <button onClick={() => alreadyFollow ? unfollowUser(id) : followUser(id as string)} className={`${alreadyFollow ? "border border-fuchsia-600" : "bg-fuchsia-600"} p-2 py-1 rounded-md text-sm font-medium cursor-pointer hover:bg-fuchsia-700 transition-all duration-300`}>{alreadyFollow ? "Unfollow" : "Follow"}</button>
                     }
                 </div>
 
@@ -149,11 +124,11 @@ const ProfilePage = () => {
                 {/* Stats */}
                 <div className="flex flex-wrap justify-around mt-5 border-t border-b border-zinc-800 py-3">
                     <div className="text-center">
-                        <h2 className="font-bold text-xl">0</h2>
+                        <h2 className="font-bold text-xl">{userProfile?.following?.length}</h2>
                         <p className="text-sm text-zinc-400">Following</p>
                     </div>
                     <div className="text-center">
-                        <h2 className="font-bold text-xl">20</h2>
+                        <h2 className="font-bold text-xl">{userProfile?.follower?.length}</h2>
                         <p className="text-sm text-zinc-400">Followers</p>
                     </div>
                     <div className="text-center">

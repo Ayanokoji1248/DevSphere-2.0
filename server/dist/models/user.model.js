@@ -91,6 +91,14 @@ const userSchema = new mongoose_1.Schema({
     posts: [{
             type: mongoose_1.default.Schema.Types.ObjectId,
             ref: "post"
+        }],
+    follower: [{
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "user"
+        }],
+    following: [{
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "user"
         }]
 }, { timestamps: true });
 const User = (0, mongoose_1.model)("user", userSchema);

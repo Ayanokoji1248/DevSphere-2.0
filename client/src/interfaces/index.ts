@@ -9,6 +9,8 @@ export interface userProp {
     address?: string,
     portfolioLink?: string,
     skills?: string[] | [],
+    following?: string[],
+    follower?: string[]
 }
 
 export interface postProp {

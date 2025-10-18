@@ -10,4 +10,6 @@ const userRouter = (0, express_1.Router)();
 userRouter.get('/me', user_middleware_1.default, user_controller_1.currentUser);
 userRouter.get('/:id', user_middleware_1.default, user_controller_1.getUser);
 userRouter.put("/:id", user_middleware_1.default, user_controller_1.updateUser);
+userRouter.put('/follow/:id', user_middleware_1.default, user_controller_1.followUser);
+userRouter.put('/unfollow/:id', user_middleware_1.default, user_controller_1.unfollowUser);
 exports.default = userRouter;

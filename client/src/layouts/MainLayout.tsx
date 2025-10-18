@@ -42,11 +42,11 @@ const MainLayout = () => {
                         {/* Stats */}
                         <div className="flex justify-around text-center border-t border-b border-zinc-700 py-3">
                             <div>
-                                <p className="text-white font-medium">120</p>
+                                <p className="text-white font-medium">{user?.follower?.length}</p>
                                 <p className="text-sm text-zinc-400">Followers</p>
                             </div>
                             <div>
-                                <p className="text-white font-medium">80</p>
+                                <p className="text-white font-medium">{user?.following?.length}</p>
                                 <p className="text-sm text-zinc-400">Following</p>
                             </div>
                             <div>

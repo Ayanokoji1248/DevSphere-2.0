@@ -25,6 +25,10 @@
 - [X] better ui of create post model 
 - [X] resturcture the html of post page
 - [ ] add navigation bar with responsive
+- [X] create follow/unfollow  routes 
+- [X] integrate follow and unfollow with react
+- [ ] create model and schema for project
+- [ ] create routes for project
 
 
 ##### Performance wise it is low very low  
