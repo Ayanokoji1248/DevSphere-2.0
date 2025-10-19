@@ -67,7 +67,7 @@ const ProfilePage = () => {
                 </div>
             </div>
 
-            <div className="px-8 mt-16 md:mt-15">
+            <div className="px-6 mt-16 md:mt-15">
                 {/* Name + Headline */}
                 <div className="flex flex-row items-center justify-between">
                     <div>

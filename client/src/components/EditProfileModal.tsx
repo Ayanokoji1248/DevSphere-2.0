@@ -132,8 +132,8 @@ const EditProfileModal = ({ setModal }: modalProp) => {
                     <button
                         onClick={handleSubmit}
                         className={`px-4 py-1 rounded-full font-medium transition ${loading
-                                ? "bg-zinc-700 text-gray-300 cursor-not-allowed"
-                                : "bg-white text-black hover:bg-gray-200"
+                            ? "bg-zinc-700 text-gray-300 cursor-not-allowed"
+                            : "bg-white text-black hover:bg-gray-200"
                             }`}
                     >
                         {loading ? "Saving..." : "Save"}
@@ -165,15 +165,15 @@ const EditProfileModal = ({ setModal }: modalProp) => {
                     </div>
 
                     {/* Profile Picture */}
-                    <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-zinc-600 -mt-14 ml-5">
+                    <div className="relative w-28 h-28 rounded-full  border-2 border-zinc-600 -mt-14 ml-5">
                         <img
                             src={profilePreview || user?.profilePic}
                             alt="profile"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover rounded-full"
                         />
                         <button
                             onClick={() => profilePicRef.current?.click()}
-                            className="absolute bottom-1 right-1 p-2 bg-white/70 rounded-full hover:bg-white transition"
+                            className="absolute p-2 right-0 top-20 z-99 bg-black border border-zinc-500 rounded-full hover:bg-zinc-800 flex items-center justify-center cursor-pointer transition-all duration-300"
                         >
                             <Edit size={16} />
                         </button>
@@ -184,6 +184,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
                             className="hidden"
                         />
                     </div>
+
 
                     {/* Form */}
                     <div className="flex flex-col gap-4 mt-6">

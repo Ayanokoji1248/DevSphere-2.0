@@ -35,3 +35,21 @@ export interface commentProp {
     text: string,
     user: userProp,
 }
+
+export interface projectProp {
+    _id: string,
+    title: string,
+    description: string,
+    projectImage: string,
+    githubLink: string,
+    projectLink: string,
+    techStack: string[],
+    status: string,
+    category: string,
+    user?: {
+        _id: string,
+        username: string,
+        fullName: string,
+        profilePic: string
+    }
+}

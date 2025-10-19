@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar"
 import useUserStore from "../stores/userStore"
 import usePostStore from "../stores/postStore"
 import { useEffect } from "react"
+import NavBar from "../components/NavBar"
 
 
 const MainLayout = () => {
@@ -11,6 +12,7 @@ const MainLayout = () => {
 
     useEffect(() => {
         fetchAllPost()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -21,7 +23,10 @@ const MainLayout = () => {
 
                 {/* Middle Section */}
                 <div className="w-full md:w-[50%] min-h-[calc(100vh-80px)] md:min-h-screen mx-auto">
-                    <Outlet />
+                    <NavBar />
+                    <div className="mt-18 md:m-0">
+                        <Outlet />
+                    </div>
 
                 </div>
 

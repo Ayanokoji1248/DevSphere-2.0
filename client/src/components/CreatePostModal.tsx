@@ -9,7 +9,7 @@ interface modalProp {
 }
 
 const CreatePostModal = ({ setModal }: modalProp) => {
-    const root = document.getElementById("main") as HTMLElement;
+    const root = document.getElementById("main") as HTMLElement || document.getElementById("project");
     const [loading, setLoading] = useState(false);
 
     const [text, setText] = useState("");
@@ -176,8 +176,8 @@ const CreatePostModal = ({ setModal }: modalProp) => {
                         type="submit"
                         disabled={loading}
                         className={`w-full py-2 rounded-md font-medium transition ${loading
-                                ? "bg-violet-700 text-gray-300 cursor-not-allowed"
-                                : "bg-violet-600 hover:bg-violet-700 text-white"
+                            ? "bg-violet-700 text-gray-300 cursor-not-allowed"
+                            : "bg-violet-600 hover:bg-violet-700 text-white"
                             }`}
                     >
                         {loading ? "Posting..." : "Post"}
