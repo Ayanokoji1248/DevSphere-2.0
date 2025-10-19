@@ -52,12 +52,10 @@ const projectSchema = new mongoose_1.Schema({
     },
     githubLink: {
         type: String,
-        required: true,
         trim: true
     },
     projectLink: {
         type: String,
-        required: true,
         trim: true
     },
     techStack: [{

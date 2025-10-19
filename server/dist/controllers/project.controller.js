@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProject = exports.getProject = exports.createProject = void 0;
+exports.getAllProject = exports.deleteProject = exports.getProject = exports.createProject = void 0;
 const zod_1 = __importDefault(require("zod"));
 const project_model_1 = __importDefault(require("../models/project.model"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -134,3 +134,21 @@ const deleteProject = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteProject = deleteProject;
+const getAllProject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const projects = yield project_model_1.default.find({}).populate("user", "_id username fullName profilePic");
+        res.status(200).json({
+            message: "All Projects",
+            projects
+        });
+        return;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+        return;
+    }
+});
+exports.getAllProject = getAllProject;

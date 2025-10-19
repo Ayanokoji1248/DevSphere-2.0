@@ -18,12 +18,10 @@ const projectSchema = new Schema({
     },
     githubLink: {
         type: String,
-        required: true,
         trim: true
     },
     projectLink: {
         type: String,
-        required: true,
         trim: true
     },
     techStack: [{

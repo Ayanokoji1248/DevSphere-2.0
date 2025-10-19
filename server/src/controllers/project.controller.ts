@@ -137,3 +137,23 @@ export const deleteProject = async (req: Request, res: Response) => {
         return
     }
 }
+
+export const getAllProject = async (req: Request, res: Response) => {
+    try {
+
+        const projects = await Project.find({}).populate("user", "_id username fullName profilePic");
+
+        res.status(200).json({
+            message: "All Projects",
+            projects
+        })
+        return
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+        return
+    }
+}

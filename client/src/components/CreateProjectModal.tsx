@@ -1,6 +1,9 @@
 import { Plus, X } from 'lucide-react';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import useUserStore from '../stores/userStore';
+import useProjectStore from '../stores/projectStore';
+import Spinner from './Spinner';
 
 interface ModalProps {
     setModal: (open: boolean) => void;
@@ -8,7 +11,10 @@ interface ModalProps {
 
 const CreateProjectModal = ({ setModal }: ModalProps) => {
     const root = document.getElementById("project") as HTMLElement;
-    console.log(root)
+
+    const { user } = useUserStore();
+    const { addProject } = useProjectStore()
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [githubLink, setGithubLink] = useState("");
@@ -19,6 +25,7 @@ const CreateProjectModal = ({ setModal }: ModalProps) => {
     const [category, setCategory] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+
     const [loading, setLoading] = useState(false);
 
 
@@ -35,15 +42,66 @@ const CreateProjectModal = ({ setModal }: ModalProps) => {
         }
     };
 
+    const uploadToCloudinary = async (file: File): Promise<string | null> => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "DevSphere"); // replace with your unsigned preset
+        formData.append("folder", "uploads"); // optional: Cloudinary folder name
+
+        try {
+            const res = await fetch(
+                "https://api.cloudinary.com/v1_1/dp7qerjic/image/upload", // replace YOUR_CLOUD_NAME
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+            const data = await res.json();
+            return data.secure_url || null;
+        } catch (error) {
+            console.error("Cloudinary upload error:", error);
+            return null;
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        // For now just log the data
-        console.log({ title, description, githubLink, projectLink, techStack, status, category, image });
+        // // For now just log the data
+        // console.log({ title, description, githubLink, projectLink, techStack, status, category, image });
 
-        setLoading(false);
-        setModal(false);
+        try {
+            if (!user || !user._id) {
+                setLoading(false);
+                return;
+            }
+
+            let imageUrl: string | null = null;
+            if (image) {
+                imageUrl = await uploadToCloudinary(image);
+                if (!imageUrl) {
+                    alert("Image upload failed!");
+                    setLoading(false);
+                    return;
+                }
+                console.log(imageUrl)
+            }
+
+            // await addPost(text, code, link, imageUrl as string);
+
+            await addProject(title, description, techStack, status, category, githubLink, projectLink, imageUrl as string);
+
+
+            setImage(null);
+            setImagePreview(null);
+            setModal(false);
+        } catch (error) {
+            console.error("Error creating post:", error);
+        } finally {
+            setLoading(false);
+        }
+
     };
 
     return createPortal(
@@ -153,6 +211,7 @@ const CreateProjectModal = ({ setModal }: ModalProps) => {
                             accept="image/*"
                             onChange={handleImageChange}
                             className="text-sm text-zinc-400 mt-2"
+                            required
                         />
                     </div>
 
@@ -160,12 +219,20 @@ const CreateProjectModal = ({ setModal }: ModalProps) => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`w-full py-2 rounded-md font-medium transition ${loading
+                        className={`w-full py-2 rounded-md font-medium transition-all duration-300 cursor-pointer ${loading
                             ? "bg-violet-700 text-gray-300 cursor-not-allowed"
                             : "bg-violet-600 hover:bg-violet-700 text-white"
                             }`}
                     >
-                        {loading ? "Creating..." : "Create Project"}
+                        {loading ? (
+                            <div className="flex items-center gap-2">
+                                <Spinner />
+                                <span>Creating...</span>
+                            </div>
+                        ) : (
+                            "Create Project"
+                        )}
+
                     </button>
                 </form>
             </div>

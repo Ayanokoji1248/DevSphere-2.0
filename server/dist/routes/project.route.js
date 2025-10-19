@@ -8,6 +8,7 @@ const user_middleware_1 = __importDefault(require("../middlewares/user.middlewar
 const project_controller_1 = require("../controllers/project.controller");
 const projectRouter = (0, express_1.Router)();
 projectRouter.post('/create', user_middleware_1.default, project_controller_1.createProject);
+projectRouter.get('/all', user_middleware_1.default, project_controller_1.getAllProject);
 projectRouter.get('/:id', user_middleware_1.default, project_controller_1.getProject);
 projectRouter.delete('/:id', user_middleware_1.default, project_controller_1.deleteProject);
 exports.default = projectRouter;
