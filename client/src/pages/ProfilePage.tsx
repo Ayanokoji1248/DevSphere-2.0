@@ -8,6 +8,8 @@ import axios from "axios";
 import { BACKEND_URL } from "../utils";
 import { type userProp } from "../interfaces";
 import useUserStore from "../stores/userStore";
+import useProjectStore from "../stores/projectStore";
+import ProjectCard from "../components/ProjectCard";
 
 const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState("Posts");
@@ -19,11 +21,24 @@ const ProfilePage = () => {
     const { user, followUser, unfollowUser } = useUserStore();
     const alreadyFollow = id && user?.following?.includes(id)
 
-    const { posts } = usePostStore()
+    const { posts } = usePostStore();
+    const { projects, fetchProjects } = useProjectStore()
 
     const userPost = posts.filter((post) => post?.user?._id === userProfile?._id).length
 
+    const userProject = projects.filter((project) => project.user?._id === userProfile?._id)
+
     useEffect(() => {
+
+        const fetchProjectIfEmpty = async () => {
+            if (projects.length === 0) {
+                try {
+                    await fetchProjects()
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+        }
 
         const getUserProfile = async () => {
             try {
@@ -34,8 +49,10 @@ const ProfilePage = () => {
             }
         }
         getUserProfile();
+        fetchProjectIfEmpty()
 
-    }, [id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id, projects])
 
     useEffect(() => {
         if (id === user?._id && user) {
@@ -136,7 +153,7 @@ const ProfilePage = () => {
                         <p className="text-sm text-zinc-400">Posts</p>
                     </div>
                     <div className="text-center">
-                        <h2 className="font-bold text-xl">{2}</h2>
+                        <h2 className="font-bold text-xl">{userProject.length}</h2>
                         <p className="text-sm text-zinc-400">Projects</p>
                     </div>
                 </div>
@@ -211,16 +228,26 @@ const ProfilePage = () => {
                         )
                     )}
 
-                    {activeTab === "Projects" &&
-                        // user.projects.map((project, idx) => (
-                        //     <div
-                        //         key={idx}
-                        //         className="border border-zinc-800 rounded-lg p-3 bg-zinc-900/60"
-                        //     >
-                        //         <h3 className="text-base font-medium">{project.name}</h3>
-                        //     </div>
-                        // ))
-                        <p>Projects</p>
+                    {activeTab === "Projects" && (userProject.length > 0)
+                        ? (
+
+                            userProject.map((project) => (
+                                <ProjectCard
+                                    key={project._id}
+                                    _id={project._id}
+                                    title={project.title}
+                                    description={project.description}
+                                    projectImage={project.projectImage}
+                                    githubLink={project.githubLink}
+                                    projectLink={project.projectLink}
+                                    status={project.status}
+                                    category={project.category}
+                                    user={project.user}
+                                    techStack={project.techStack}
+                                />
+                            ))
+
+                        ) : <p className="text-zinc-500 font-medium text-sm text-center">No Projects yet.</p>
                     }
                 </div>
             </div>

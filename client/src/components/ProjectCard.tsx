@@ -58,7 +58,7 @@ const ProjectCard = ({
         >
             {/* Owner Menu */}
             {isOwner && (
-                <div className="absolute top-3 right-3 z-20" ref={menuRef}>
+                <div className="absolute top-3 right-3 z-10" ref={menuRef}>
                     <button
                         onClick={(e) => {
                             e.preventDefault();

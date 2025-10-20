@@ -4,17 +4,18 @@ import useUserStore from "../stores/userStore"
 import usePostStore from "../stores/postStore"
 import { useEffect } from "react"
 import NavBar from "../components/NavBar"
+import useProjectStore from "../stores/projectStore"
 
 
 const MainLayout = () => {
     const { user } = useUserStore()
     const { fetchAllPost, posts } = usePostStore();
-
+    const { projects, fetchProjects } = useProjectStore()
     useEffect(() => {
-        fetchAllPost()
+        fetchAllPost();
+        fetchProjects()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
     return (
         <div className="bg-zinc-950 relative w-full" id="main">
             <div className="w-full min-h-screen bg-zinc-950 text-white flex flex-col md:flex-row max-w-7xl mx-auto relative" >
@@ -59,7 +60,7 @@ const MainLayout = () => {
                                 <p className="text-sm text-zinc-400">Posts</p>
                             </div>
                             <div>
-                                <p className="text-white font-medium">12</p>
+                                <p className="text-white font-medium">{projects.filter((project) => project.user?._id === user?._id).length}</p>
                                 <p className="text-sm text-zinc-400">Projects</p>
                             </div>
                         </div>

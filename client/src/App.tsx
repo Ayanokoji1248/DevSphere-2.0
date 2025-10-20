@@ -16,6 +16,7 @@ import loadingAnimation from "./assets/Minimal Style 3D Sphere Animation.json"
 import PostPage from './pages/PostPage'
 import ProjectPage from './pages/ProjectPage'
 import ProjectLayout from './layouts/ProjectLayout'
+import ExplorePage from './pages/ExplorePage'
 
 const App = () => {
 
@@ -64,10 +65,10 @@ const App = () => {
           <Route path='/user/:id' element={<ProfilePage />} />
           <Route path='/post/:id' element={<PostPage />} />
         </Route>
-      </Route>
-
-      <Route element={<ProjectLayout />}>
-        <Route path='/project' element={<ProjectPage />} />
+        <Route element={<ProjectLayout />}>
+          <Route path='/project' element={<ProjectPage />} />
+          <Route path='/explore' element={<ExplorePage />} />
+        </Route>
       </Route>
 
     </Routes>

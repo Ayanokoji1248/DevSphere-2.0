@@ -60,6 +60,7 @@ const ProjectPage = () => {
 
                 {projects.map((project) => (
                     <ProjectCard
+                        key={project._id}
                         _id={project._id}
                         title={project.title}
                         projectImage={project.projectImage}

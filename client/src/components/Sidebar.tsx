@@ -60,8 +60,8 @@ const Sidebar = () => {
                 <div className="flex flex-col gap-1 w-full">
                     {[
                         { icon: <HomeIcon />, label: "Home", path: "/home" },
-                        { icon: <Search />, label: "Explore", path: "/home" },
-                        { icon: <FolderCode />, label: "Projects", path: "/home" },
+                        { icon: <Search />, label: "Explore", path: "/explore" },
+                        { icon: <FolderCode />, label: "Projects", path: "/project" },
                         { icon: <Code />, label: "Code Review", path: "/home" },
                         { icon: <User />, label: "Profile", path: `/user/${user?._id}` },
                     ].map((item, index) => (

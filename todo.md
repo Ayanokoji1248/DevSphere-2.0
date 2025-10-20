@@ -1,39 +1,44 @@
 # My To-Do List
 
 ## 💻 Backend
-- [X] Start server using express
-- [X] Create user model and make proper schema
-- [X] Create auth routes for register and login and logout
-- [X] Create post routes CRUD
-- [X] Init React with login/register
-- [X] add zustand for user
-- [X] Add zod validation
-- [X] Protected Routes
-- [X] call /me endpoint on refresh and update the user state
-- [X] Also Added Lottie Animation
+
+- [x] Start server using express
+- [x] Create user model and make proper schema
+- [x] Create auth routes for register and login and logout
+- [x] Create post routes CRUD
+- [x] Init React with login/register
+- [x] add zustand for user
+- [x] Add zod validation
+- [x] Protected Routes
+- [x] call /me endpoint on refresh and update the user state
+- [x] Also Added Lottie Animation
 - [ ] Add Static files for profilePic and banner Image
-- [X] User Logout 
-- [X] Post Modal for link image & code 
-- [ ] Lazy Loading/ pagination 
-- [X] Delete Post 
-- [X] User Profile and another user profile 
-- [X] supabase integration for image storage performance wise very low
-- [X] use cloudinary for image storage it will be easy and also performance wise
-- [X] modal and api of comment and comment modal to show in FE
+- [x] User Logout
+- [x] Post Modal for link image & code
+- [ ] Lazy Loading/ pagination
+- [x] Delete Post
+- [x] User Profile and another user profile
+- [x] supabase integration for image storage performance wise very low
+- [x] use cloudinary for image storage it will be easy and also performance wise
+- [x] modal and api of comment and comment modal to show in FE
 - [ ] other user profile route in FE
-- [X] Edit user profile 
-- [X] better ui of create post model 
-- [X] resturcture the html of post page
+- [x] Edit user profile
+- [x] better ui of create post model
+- [x] resturcture the html of post page
 - [ ] add navigation bar with responsive
-- [X] create follow/unfollow  routes 
-- [X] integrate follow and unfollow with react
-- [ ] create model and schema for project
-- [ ] create routes for project
+- [x] create follow/unfollow routes
+- [x] integrate follow and unfollow with react
+- [x] create model and schema for project
+- [x] create routes for project
+- [x] project creation and deletion done
+- [ ] make particular project page
+- [ ] add AI code reviewer functionality
+- [ ] do small changes where necessary
 
-
-##### Performance wise it is low very low  
+##### Performance wise it is low very low
 
 ## Approach
+
 - So what i was doing is that after register/login i fetch post instantly but what i was thinkging that fetching post will take time and in login page it will show keep loading until all posts comes so what we will do is we will move fetchPost function to homepage and check if user is authenticated if it is then only we fetch post
 
 ```

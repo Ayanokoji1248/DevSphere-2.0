@@ -19,7 +19,7 @@ const NavBar = () => {
 
     const menuItems = [
         { name: "Home", icon: <HomeIcon size={20} />, path: "/home" },
-        { name: "Explore", icon: <Search size={20} />, path: "/home" },
+        { name: "Explore", icon: <Search size={20} />, path: "/explore" },
         { name: "Projects", icon: <FolderCode size={20} />, path: "/project" },
         { name: "Code Review", icon: <Code size={20} />, path: "/home" },
         { name: "Profile", icon: <User size={20} />, path: `/user/${user?._id}` },
