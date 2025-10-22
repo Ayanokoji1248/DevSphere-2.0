@@ -51,7 +51,7 @@ const ProfilePage = () => {
         getUserProfile();
         fetchProjectIfEmpty()
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, projects])
 
     useEffect(() => {
@@ -228,9 +228,8 @@ const ProfilePage = () => {
                         )
                     )}
 
-                    {activeTab === "Projects" && (userProject.length > 0)
-                        ? (
-
+                    {activeTab === "Projects" && (
+                        userProject.length > 0 ? (
                             userProject.map((project) => (
                                 <ProjectCard
                                     key={project._id}
@@ -246,10 +245,12 @@ const ProfilePage = () => {
                                     techStack={project.techStack}
                                 />
                             ))
-
-                        ) : <p className="text-zinc-500 font-medium text-sm text-center">No Projects yet.</p>
-                    }
+                        ) : (
+                            <p className="text-zinc-500 font-medium text-sm text-center">No Projects yet.</p>
+                        )
+                    )}
                 </div>
+
             </div>
         </div >
 

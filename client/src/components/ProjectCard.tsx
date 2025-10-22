@@ -52,7 +52,7 @@ const ProjectCard = ({
 
     return (
         <Link
-            to={`/projects/${_id}`}
+            to={`/project/${_id}`}
             key={_id}
             className="group relative bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-zinc-700 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
         >

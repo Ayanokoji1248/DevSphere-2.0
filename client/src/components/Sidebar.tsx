@@ -62,7 +62,7 @@ const Sidebar = () => {
                         { icon: <HomeIcon />, label: "Home", path: "/home" },
                         { icon: <Search />, label: "Explore", path: "/explore" },
                         { icon: <FolderCode />, label: "Projects", path: "/project" },
-                        { icon: <Code />, label: "Code Review", path: "/home" },
+                        { icon: <Code />, label: "Code Review", path: "/review" },
                         { icon: <User />, label: "Profile", path: `/user/${user?._id}` },
                     ].map((item, index) => (
                         <Link to={item.path}

@@ -17,6 +17,8 @@ import PostPage from './pages/PostPage'
 import ProjectPage from './pages/ProjectPage'
 import ProjectLayout from './layouts/ProjectLayout'
 import ExplorePage from './pages/ExplorePage'
+import ReviewPage from './pages/ReviewPage'
+import ParticularProjectPage from './pages/ParticularProjectPage'
 
 const App = () => {
 
@@ -67,7 +69,9 @@ const App = () => {
         </Route>
         <Route element={<ProjectLayout />}>
           <Route path='/project' element={<ProjectPage />} />
+          <Route path='/project/:id' element={<ParticularProjectPage />} />
           <Route path='/explore' element={<ExplorePage />} />
+          <Route path='/review' element={<ReviewPage />} />
         </Route>
       </Route>
 
