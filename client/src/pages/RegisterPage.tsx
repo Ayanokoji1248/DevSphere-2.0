@@ -44,7 +44,7 @@ const RegisterPage = () => {
             await register(fullName, username, email, password);
             navigate('/home')
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Login Failed", {
+            toast.error(error instanceof Error ? error.message : "Register Failed", {
                 duration: 1000
             });
         }
