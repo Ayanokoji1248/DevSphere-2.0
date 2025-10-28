@@ -13,11 +13,13 @@ import aiRouter from "./routes/ai.route";
 dotenv.config();
 const app = express();
 
+const allowedUrl = [process.env.FRONTEND_URL as string, "http://localhost:5173"]
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParse())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: allowedUrl,
     credentials: true
 }))
 
