@@ -22,6 +22,7 @@ app.use(cors({
     origin: allowedUrl,
     credentials: true
 }))
+console.log(process.env.FRONTEND_URL)
 
 app.use('/api/auth', authRouter);
 app.use('/api/post', postRouter);

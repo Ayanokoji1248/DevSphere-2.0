@@ -26,13 +26,15 @@ const explore_route_1 = __importDefault(require("./routes/explore.route"));
 const ai_route_1 = __importDefault(require("./routes/ai.route"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+const allowedUrl = [process.env.FRONTEND_URL, "http://localhost:5173"];
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: "http://localhost:5173",
+    origin: allowedUrl,
     credentials: true
 }));
+console.log(process.env.FRONTEND_URL);
 app.use('/api/auth', auth_route_1.default);
 app.use('/api/post', post_route_1.default);
 app.use('/api/user', user_route_1.default);
