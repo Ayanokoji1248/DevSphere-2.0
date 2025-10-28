@@ -28,6 +28,9 @@ const userMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     }
     catch (error) {
         console.error(error);
+        res.status(404).json({
+            message: "Token Not Found"
+        });
     }
 });
 exports.default = userMiddleware;

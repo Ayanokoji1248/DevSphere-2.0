@@ -35,6 +35,9 @@ const userMiddleware = async (req: Request, res: Response, next: NextFunction) =
 
     } catch (error) {
         console.error(error)
+        res.status(404).json({
+            message: "Token Not Found"
+        })
     }
 }
 

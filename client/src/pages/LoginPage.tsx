@@ -8,6 +8,7 @@ import Spinner from "../components/Spinner";
 
 const LoginPage = () => {
     const navigate = useNavigate();
+
     const { login } = useAuthStore();
     const [loading, setLoading] = useState(false)
 

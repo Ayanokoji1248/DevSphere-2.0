@@ -31,8 +31,8 @@
 - [x] create model and schema for project
 - [x] create routes for project
 - [x] project creation and deletion done
-- [ ] make particular project page
-- [ ] add AI code reviewer functionality
+- [x] make particular project page
+- [x] add AI code reviewer functionality
 - [ ] do small changes where necessary
 
 ##### Performance wise it is low very low

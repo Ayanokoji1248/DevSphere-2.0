@@ -91,7 +91,8 @@ const usePostStore = create<postStoreType>((set) => ({
             }))
 
 
-            await axios.put(`${BACKEND_URL}/post/${postId}/like`, {}, { withCredentials: true })
+            await axios.put(`${BACKEND_URL}/post/${postId}/unlike`, {}, { withCredentials: true })
+
         } catch (error) {
             console.error(error);
             set((state) => ({
