@@ -21,11 +21,11 @@
 - [x] supabase integration for image storage performance wise very low
 - [x] use cloudinary for image storage it will be easy and also performance wise
 - [x] modal and api of comment and comment modal to show in FE
-- [ ] other user profile route in FE
+- [x] other user profile route in FE
 - [x] Edit user profile
 - [x] better ui of create post model
 - [x] resturcture the html of post page
-- [ ] add navigation bar with responsive
+- [x] add navigation bar with responsive
 - [x] create follow/unfollow routes
 - [x] integrate follow and unfollow with react
 - [x] create model and schema for project
@@ -34,6 +34,7 @@
 - [x] make particular project page
 - [x] add AI code reviewer functionality
 - [ ] do small changes where necessary
+- [ ] Delete/Edit Comment is remaining
 
 ##### Performance wise it is low very low
 

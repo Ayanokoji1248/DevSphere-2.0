@@ -55,7 +55,7 @@ const PostCard = ({ _id, text, imageUrl, code, link, user, likes, comments }: po
     }
 
     return (
-        <div onClick={() => navigate(`/post/${_id}`)} className="w-full bg-black text-white border-y border-zinc-800 p-6 md:px-8 flex gap-4 rounded-lg hover:bg-[#090909] cursor-pointer transition-all duration-300">
+        <div onClick={() => navigate(`/post/${_id}`)} className="w-full bg-zinc-950 text-white border-y border-zinc-800 p-6 md:px-8 flex gap-4 hover:bg-[#0c0c0c] cursor-pointer transition-all duration-300">
             <div className="flex gap-3">
                 <img
                     className="w-10 h-10 rounded-full object-cover border border-zinc-700"

@@ -72,7 +72,8 @@ const userRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const token = (0, generateToken_1.generateToken)({ _id: user._id.toString(), email: user.email });
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "strict",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "none",
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
         const _a = user.toObject(), { password: _ } = _a, userData = __rest(_a, ["password"]);
@@ -124,7 +125,8 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = (0, generateToken_1.generateToken)({ _id: user._id.toString(), email: user.email });
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "strict",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "none",
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
         const _a = user.toObject(), { password: _ } = _a, userData = __rest(_a, ["password"]);
@@ -146,7 +148,8 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.clearCookie("token", {
             httpOnly: true,
-            sameSite: "strict"
+            sameSite: "none",
+            secure: process.env.NODE_ENV === "production"
         });
         res.status(200).json({
             message: "User Logout"

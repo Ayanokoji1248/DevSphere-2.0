@@ -23,7 +23,8 @@ const PostPage = () => {
     const menuRef = useRef<HTMLDivElement>(null);
 
     const [postLoading, setPostLoading] = useState(true)
-    const [commentLoading, setCommentLoading] = useState(true)
+    const [commentLoading, setCommentLoading] = useState(true);
+    const [commentPosting, setCommentPosting] = useState(false);
 
     const [comment, setComment] = useState("");
 
@@ -63,6 +64,7 @@ const PostPage = () => {
     };
 
     const commentSubmit = async () => {
+        setCommentPosting(true)
         try {
             const response = await axios.post(`${BACKEND_URL}/comment/create/${id}`, { text: comment }, { withCredentials: true });
 
@@ -74,6 +76,7 @@ const PostPage = () => {
             console.error(error);
         } finally {
             setComment("");
+            setCommentPosting(false)
         }
     }
 
@@ -104,6 +107,23 @@ const PostPage = () => {
         fetchComment()
         getPost()
     }, [id])
+
+
+    useEffect(() => {
+
+        const clickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current?.contains(event.target as Node)) {
+                setMenuOpen(false)
+            }
+        }
+
+        document.addEventListener("mousedown", clickOutside)
+
+        return () => {
+            document.removeEventListener("mousedown", clickOutside)
+        }
+
+    }, [])
 
     const handleLikeToggle = async () => {
         if (!post || !currentUser?._id) return;
@@ -307,7 +327,7 @@ const PostPage = () => {
 
                     </div>
                     <div className="flex justify-end">
-                        <button onClick={commentSubmit} disabled={!comment.slice()} className="px-3 justify-end py-1 bg-white text-black rounded-full w-fit font-medium disabled:bg-neutral-500">Reply</button>
+                        <button onClick={commentSubmit} disabled={!comment.slice() || commentPosting} className="px-3 justify-end py-1 bg-white text-black rounded-full w-fit font-medium disabled:bg-neutral-500">Reply</button>
                     </div>
                 </div>
 

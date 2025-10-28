@@ -174,7 +174,7 @@ const ProfilePage = () => {
                         }
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        {user?.skills?.map((skill, index) => (
+                        {userProfile?.skills?.map((skill, index) => (
                             <span
                                 key={index}
                                 className="px-2 py-1 bg-blue-900/60 text-blue-400 text-sm rounded-full font-medium"
