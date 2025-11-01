@@ -73,7 +73,7 @@ const userRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
         const _a = user.toObject(), { password: _ } = _a, userData = __rest(_a, ["password"]);
@@ -126,7 +126,7 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
         const _a = user.toObject(), { password: _ } = _a, userData = __rest(_a, ["password"]);
