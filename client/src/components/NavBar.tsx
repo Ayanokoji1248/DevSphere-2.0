@@ -5,6 +5,7 @@ import {
     LogOut,
     Search,
     User,
+    MessageSquare,
 } from "lucide-react"
 import { useState } from "react"
 import useUserStore from "../stores/userStore";
@@ -21,7 +22,8 @@ const NavBar = () => {
         { name: "Home", icon: <HomeIcon size={20} />, path: "/home" },
         { name: "Explore", icon: <Search size={20} />, path: "/explore" },
         { name: "Projects", icon: <FolderCode size={20} />, path: "/project" },
-        { name: "Code Review", icon: <Code size={20} />, path: "/home" },
+        { name: "Code Review", icon: <Code size={20} />, path: "/review" },
+        { name: "Messages", icon: <MessageSquare size={20} />, path: "/messages" },
         { name: "Profile", icon: <User size={20} />, path: `/user/${user?._id}` },
     ]
 

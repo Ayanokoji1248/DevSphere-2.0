@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.unfollowUser = exports.followUser = exports.updateUser = exports.getUser = exports.currentUser = void 0;
+exports.getSuggestedUser = exports.getUserFollowing = exports.unfollowUser = exports.followUser = exports.updateUser = exports.getUser = exports.currentUser = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const currentUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -205,3 +205,55 @@ const unfollowUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.unfollowUser = unfollowUser;
+const getUserFollowing = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.user.id;
+        const user = yield user_model_1.default.findById(userId).populate("following", "_id username profilePic fullName");
+        if (!user) {
+            res.status(404).json({
+                message: "User not found"
+            });
+            return;
+        }
+        res.status(200).json({
+            message: "User Following List",
+            userFollowing: user.following,
+        });
+        return;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+        return;
+    }
+});
+exports.getUserFollowing = getUserFollowing;
+const getSuggestedUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.user.id;
+        const user = yield user_model_1.default.findById(userId).select("following");
+        if (!user) {
+            res.status(404).json({
+                message: "User not found"
+            });
+            return;
+        }
+        const suggestedUsers = yield user_model_1.default.find({
+            _id: { $nin: [userId, ...user === null || user === void 0 ? void 0 : user.following] }
+        });
+        res.status(200).json({
+            message: "Suggested Users",
+            suggestedUsers,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+        return;
+    }
+});
+exports.getSuggestedUser = getSuggestedUser;

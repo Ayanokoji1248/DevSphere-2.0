@@ -8,4 +8,5 @@ const user_middleware_1 = __importDefault(require("../middlewares/user.middlewar
 const ai_controller_1 = require("../controllers/ai.controller");
 const aiRouter = (0, express_1.Router)();
 aiRouter.post('/review', user_middleware_1.default, ai_controller_1.reviewCode);
+aiRouter.post('/followUp', user_middleware_1.default, ai_controller_1.askAboutCode);
 exports.default = aiRouter;

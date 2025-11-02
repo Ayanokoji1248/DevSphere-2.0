@@ -6,6 +6,7 @@ import { BACKEND_URL } from "../utils";
 import PostCard from "../components/PostCard";
 import ProjectCard from "../components/ProjectCard";
 import type { postProp, projectProp, userProp } from "../interfaces";
+import UserCard from "../components/UserCard";
 
 const ExplorePage = () => {
     const [activeTab, setActiveTab] = useState("Developers");
@@ -90,31 +91,7 @@ const ExplorePage = () => {
                     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
                         {developers.length > 0 ? (
                             developers.map((dev: userProp) => (
-                                <div
-                                    key={dev._id}
-                                    className="bg-zinc-900 border border-zinc-800 hover:border-violet-600 transition-all rounded-2xl p-4 flex flex-col items-center text-center"
-                                >
-                                    <img
-                                        src={dev.profilePic}
-                                        alt={dev.fullName}
-                                        className="w-20 h-20 rounded-full object-cover border border-zinc-700"
-                                    />
-                                    <h2 className="mt-3 text-lg font-semibold">{dev.fullName}</h2>
-                                    <p className="text-sm text-zinc-400">@{dev.username}</p>
-                                    {dev.headline && (
-                                        <p className="text-xs text-zinc-500 mt-2 line-clamp-2">{dev.headline}</p>
-                                    )}
-                                    <div className="flex flex-wrap justify-center gap-2 mt-3">
-                                        {dev.skills?.map((skill: string, i: number) => (
-                                            <span
-                                                key={i}
-                                                className="text-xs bg-blue-900/60 text-blue-400 px-2 py-1 rounded-full"
-                                            >
-                                                {skill}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
+                                <UserCard key={dev._id} {...dev} />
                             ))
                         ) : (
                             <p className="text-center text-zinc-500 w-full">No developers found.</p>

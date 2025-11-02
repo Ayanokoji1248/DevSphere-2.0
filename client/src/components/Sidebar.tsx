@@ -5,6 +5,7 @@ import {
     Globe,
     HomeIcon,
     LogOut,
+    MessageSquare,
     Search,
     User,
 } from "lucide-react";
@@ -63,6 +64,7 @@ const Sidebar = () => {
                         { icon: <Search />, label: "Explore", path: "/explore" },
                         { icon: <FolderCode />, label: "Projects", path: "/project" },
                         { icon: <Code />, label: "Code Review", path: "/review" },
+                        { icon: <MessageSquare />, label: "Messages", path: "/messages" },
                         { icon: <User />, label: "Profile", path: `/user/${user?._id}` },
                     ].map((item, index) => (
                         <Link to={item.path}

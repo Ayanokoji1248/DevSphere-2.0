@@ -29,7 +29,7 @@ export const explore = async (req: Request, res: Response) => {
                     { headline: { $regex: q, $options: "i" } },
                     { skills: { $regex: q, $options: "i" } }
                 ]
-            }).select("fullName username headline skills profilePic")
+            }).select("fullName username headline skills profilePic following follower")
         }
 
         if (!type || type === "posts") {

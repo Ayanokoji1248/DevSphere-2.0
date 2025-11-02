@@ -34,7 +34,7 @@ const explore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     { headline: { $regex: q, $options: "i" } },
                     { skills: { $regex: q, $options: "i" } }
                 ]
-            }).select("fullName username headline skills profilePic");
+            }).select("fullName username headline skills profilePic following follower");
         }
         if (!type || type === "posts") {
             results.posts = yield post_model_1.default.find({

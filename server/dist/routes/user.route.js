@@ -8,6 +8,8 @@ const user_middleware_1 = __importDefault(require("../middlewares/user.middlewar
 const user_controller_1 = require("../controllers/user.controller");
 const userRouter = (0, express_1.Router)();
 userRouter.get('/me', user_middleware_1.default, user_controller_1.currentUser);
+userRouter.get('/following', user_middleware_1.default, user_controller_1.getUserFollowing);
+userRouter.get('/suggested-user', user_middleware_1.default, user_controller_1.getSuggestedUser);
 userRouter.get('/:id', user_middleware_1.default, user_controller_1.getUser);
 userRouter.put("/:id", user_middleware_1.default, user_controller_1.updateUser);
 userRouter.put('/follow/:id', user_middleware_1.default, user_controller_1.followUser);

@@ -226,3 +226,64 @@ export const unfollowUser = async (req: Request, res: Response) => {
         return
     }
 }
+
+export const getUserFollowing = async (req: Request, res: Response) => {
+    try {
+
+        const userId = req.user.id;
+
+        const user = await User.findById(userId).populate("following", "_id username profilePic fullName");
+
+        if (!user) {
+            res.status(404).json({
+                message: "User not found"
+            })
+            return
+        }
+
+        res.status(200).json({
+            message: "User Following List",
+            userFollowing: user.following,
+        })
+        return
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+        return
+    }
+}
+
+export const getSuggestedUser = async (req: Request, res: Response) => {
+    try {
+
+        const userId = req.user.id;
+
+        const user = await User.findById(userId).select("following");
+
+        if (!user) {
+            res.status(404).json({
+                message: "User not found"
+            })
+            return
+        }
+
+        const suggestedUsers = await User.find({
+            _id: { $nin: [userId, ...user?.following] }
+        })
+        
+        res.status(200).json({
+            message: "Suggested Users",
+            suggestedUsers,
+        })
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+        return
+    }
+}

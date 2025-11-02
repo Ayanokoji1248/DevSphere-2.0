@@ -9,12 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reviewCode = void 0;
+exports.askAboutCode = exports.reviewCode = void 0;
 const googleGeminiConnection_1 = require("../config/googleGeminiConnection");
+const userCodeContext = {};
 const reviewCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
     try {
+        const userId = req.user.id;
         const { code } = req.body;
+        userCodeContext[userId] = code;
         if (!code || typeof code !== "string") {
             res.status(400).json({
                 message: "Code is required and must be a string"
@@ -76,3 +79,48 @@ _Brief summary (2–3 lines) about what the code does and overall assessment._
     }
 });
 exports.reviewCode = reviewCode;
+const askAboutCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e;
+    try {
+        const userId = req.user.id;
+        const { question } = req.body;
+        if (!question || typeof question !== "string") {
+            res.status(400).json({
+                message: "Question is required"
+            });
+            return;
+        }
+        const codeContext = userCodeContext[userId];
+        if (!codeContext) {
+            res.status(400).json({
+                message: "No Code Context found. Please Upload your code first"
+            });
+        }
+        const prompt = `
+The user previously shared the following code:
+---
+${codeContext}
+---
+
+Now the user is asking this question:
+"${question}"
+
+Respond based on the provided code. Be specific and technical.
+Format your answer using Markdown, with examples and explanations where appropriate.
+    `;
+        const response = yield googleGeminiConnection_1.ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+        });
+        res.status(200).json({
+            answer: ((_e = (_d = (_c = (_b = (_a = response.candidates) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.content) === null || _c === void 0 ? void 0 : _c.parts) === null || _d === void 0 ? void 0 : _d[0]) === null || _e === void 0 ? void 0 : _e.text) || "No response generated",
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+});
+exports.askAboutCode = askAboutCode;

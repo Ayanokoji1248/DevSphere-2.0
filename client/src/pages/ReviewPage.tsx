@@ -6,10 +6,13 @@ import CodeReviewOutput from "../components/CodeReviewOutput";
 
 const ReviewPage = () => {
     const [code, setCode] = useState("// Write or paste your code here...");
-    const [language, setLanguage] = useState("javascript"); // New state for language
+    const [language, setLanguage] = useState("javascript");
     const [review, setReview] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    // const [followUp, setFollowUp] = useState("");
+    // const [followUpResponse, setFollowUpResponse] = useState("");
+    // const [followUpLoading, setFollowUpLoading] = useState(false);
 
     const handleReview = async () => {
         if (!code.trim()) {
@@ -18,12 +21,14 @@ const ReviewPage = () => {
         }
         setError("");
         setReview("");
+        // setFollowUp("");
+        // setFollowUpResponse("");
         setLoading(true);
 
         try {
             const response = await axios.post(
                 `${BACKEND_URL}/ai/review`,
-                { code, language }, // send language too
+                { code, language },
                 { withCredentials: true }
             );
             setReview(response.data.review);
@@ -35,11 +40,30 @@ const ReviewPage = () => {
         }
     };
 
+    // const handleFollowUp = async () => {
+    //     if (!followUp.trim()) return;
+    //     setFollowUpResponse("");
+    //     setFollowUpLoading(true);
+    //     try {
+    //         const response = await axios.post(
+    //             `${BACKEND_URL}/ai/followUp`,
+    //             { question: followUp },
+    //             { withCredentials: true }
+    //         );
+    //         setFollowUpResponse(response.data.answer);
+    //     } catch (err) {
+    //         console.log(err);
+    //         setFollowUpResponse("Failed to get follow-up response.");
+    //     } finally {
+    //         setFollowUpLoading(false);
+    //     }
+    // };
+
     return (
-        <div className="min-h-screen bg-zinc-950 text-gray-100 flex justify-center px-4 py-5">
-            <div className="w-full max-w-4xl flex flex-col gap-6">
+        <div className="min-h-screen bg-zinc-950 text-gray-100 flex justify-center px-8 py-5">
+            <div className="w-full max-w-6xl flex flex-col gap-6">
                 {/* Header */}
-                <header className=" text-center md:text-left">
+                <header className="text-center md:text-left">
                     <h1 className="text-3xl md:text-4xl font-bold mb-2">
                         AI Code Reviewer
                     </h1>
@@ -71,7 +95,7 @@ const ReviewPage = () => {
                 <section className="border border-zinc-700 rounded-xl overflow-hidden">
                     <Editor
                         height="350px"
-                        language={language} // dynamic language
+                        language={language}
                         theme="vs-dark"
                         value={code}
                         onChange={(value) => setCode(value || "")}
@@ -85,7 +109,7 @@ const ReviewPage = () => {
                 </section>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col md:flex-row gap-4 mt-4">
+                <div className="flex flex-col md:flex-row gap-4 mt-4 items-start md:items-center">
                     <button
                         onClick={handleReview}
                         disabled={loading}
@@ -110,8 +134,47 @@ const ReviewPage = () => {
                     )}
                 </div>
 
-                {/* Review Output */}
-                {review && <CodeReviewOutput review={review} />}
+                {/* Side-by-Side Layout */}
+                {review && (
+                    <div className="w-full">
+                        {/* Left: Review Output */}
+                        <div className="border border-zinc-700 rounded-xl overflow-y-auto max-h-[700px] bg-zinc-900 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
+                            <CodeReviewOutput review={review} />
+                        </div>
+
+                        {/* Right: Follow-up Section */}
+                        {/* <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-5 flex flex-col justify-between">
+                            <div>
+                                <h2 className="text-lg font-semibold mb-3">Ask a follow-up question</h2>
+                                <div className="flex flex-col gap-3">
+                                    <input
+                                        type="text"
+                                        value={followUp}
+                                        onChange={(e) => setFollowUp(e.target.value)}
+                                        placeholder="e.g., Explain this issue more clearly..."
+                                        className="bg-zinc-800 p-2 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+                                    />
+                                    <button
+                                        onClick={handleFollowUp}
+                                        disabled={followUpLoading}
+                                        className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all ${followUpLoading
+                                            ? "bg-blue-400 cursor-not-allowed"
+                                            : "bg-blue-600 hover:bg-blue-700 active:scale-95"
+                                            }`}
+                                    >
+                                        {followUpLoading ? "Asking..." : "Ask"}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {followUpResponse && (
+                                <div className="mt-5 bg-zinc-800 border border-zinc-700 rounded-md p-3 text-sm text-gray-300 overflow-y-auto max-h-[400px]">
+                                    {followUpResponse}
+                                </div>
+                            )}
+                        </div> */}
+                    </div>
+                )}
             </div>
         </div>
     );

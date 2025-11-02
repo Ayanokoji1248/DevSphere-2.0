@@ -13,6 +13,7 @@ import ExplorePage from './pages/ExplorePage'
 import ReviewPage from './pages/ReviewPage'
 import ParticularProjectPage from './pages/ParticularProjectPage'
 import HeroPage from './pages/HeroPage'
+import MessagePage from './pages/MessagePage'
 
 const App = () => {
 
@@ -37,6 +38,7 @@ const App = () => {
           <Route path='/project/:id' element={<ParticularProjectPage />} />
           <Route path='/explore' element={<ExplorePage />} />
           <Route path='/review' element={<ReviewPage />} />
+          <Route path='/messages' element={<MessagePage />} />
         </Route>
       </Route>
 

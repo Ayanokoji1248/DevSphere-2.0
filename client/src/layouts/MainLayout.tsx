@@ -6,62 +6,40 @@ import { useEffect, useState } from "react"
 import NavBar from "../components/NavBar"
 import useProjectStore from "../stores/projectStore"
 import { UserPlus } from "lucide-react"
+import axios from "axios"
+import { BACKEND_URL } from "../utils"
 
-interface User {
+interface SuggestedUser {
     _id: string
-    name: string
+    fullName: string
     username: string
     profilePic?: string
 }
 
 const MainLayout = () => {
-    const { user } = useUserStore()
+    const { user, followUser } = useUserStore()
     const { fetchAllPost, posts } = usePostStore();
     const { projects, fetchProjects } = useProjectStore()
 
-    const [users, setUsers] = useState<User[]>([])
+    const [users, setUsers] = useState<SuggestedUser[]>([])
+
+    const suggestedUsers = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/user/suggested-user`, { withCredentials: true });
+            console.log(response.data)
+            setUsers(response.data.suggestedUsers)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
-        // 🔹 Dummy users for testing
-        const dummyUsers: User[] = [
-            {
-                _id: "1",
-                name: "Alice Johnson",
-                username: "alice_dev",
-                profilePic: "https://randomuser.me/api/portraits/women/45.jpg",
-            },
-            {
-                _id: "2",
-                name: "Brandon Lee",
-                username: "brandon_js",
-                profilePic: "https://randomuser.me/api/portraits/men/32.jpg",
-            },
-            {
-                _id: "3",
-                name: "Chirag Patel",
-                username: "chirag_codes",
-                profilePic: "https://randomuser.me/api/portraits/men/56.jpg",
-            },
-            {
-                _id: "4",
-                name: "Diana Smith",
-                username: "diana_uiux",
-                profilePic: "https://randomuser.me/api/portraits/women/12.jpg",
-            },
-            {
-                _id: "5",
-                name: "Ethan Brown",
-                username: "ethan_backend",
-                profilePic: "https://randomuser.me/api/portraits/men/67.jpg",
-            },
-        ]
-
-        // Simulate fetch delay
-        setTimeout(() => setUsers(dummyUsers), 800)
+        suggestedUsers()
     }, [])
 
     const handleFollow = (userId: string) => {
         setUsers((prev) => prev.filter((u) => u._id !== userId))
+        followUser(userId)
     }
 
     useEffect(() => {
@@ -125,7 +103,7 @@ const MainLayout = () => {
                     </div>
                     <div className="w-full bg-zinc-900 rounded-2xl p-4 shadow-sm">
                         <h2 className="text-lg font-semibold mb-3">Suggested for you</h2>
-                        <div className="space-y-3">
+                        <div className="space-y-5">
                             {users.map((user) => (
                                 <div key={user._id} className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
@@ -135,13 +113,13 @@ const MainLayout = () => {
                                             className="w-10 h-10 rounded-full object-cover"
                                         />
                                         <div>
-                                            <p className="font-medium text-sm">{user.name}</p>
+                                            <p className="font-medium text-sm">{user.fullName}</p>
                                             <p className="text-xs text-gray-500">@{user.username}</p>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => handleFollow(user._id)}
-                                        className="flex items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-600 transition"
+                                        className="flex items-center gap-1 bg-fuchsia-600 text-white px-3 py-1 rounded-md font-medium text-sm hover:bg-fuchsia-700 transition duration-300 cursor-pointer"
                                     >
                                         <UserPlus size={14} /> Follow
                                     </button>

@@ -1,9 +1,17 @@
 import { Request, Response } from "express"
 import { ai } from "../config/googleGeminiConnection"
 
+const userCodeContext: Record<string, string> = {}
+
 export const reviewCode = async (req: Request, res: Response) => {
     try {
+
+        const userId = req.user.id as string;
+
         const { code } = req.body
+
+        userCodeContext[userId] = code
+
 
         if (!code || typeof code !== "string") {
             res.status(400).json({
@@ -48,8 +56,6 @@ _Brief summary (2–3 lines) about what the code does and overall assessment._
 // Improved or corrected version of the code
 \`\`\`
 `
-
-
             }
         })
 
@@ -71,4 +77,55 @@ _Brief summary (2–3 lines) about what the code does and overall assessment._
         })
     }
 
+}
+
+export const askAboutCode = async (req: Request, res: Response) => {
+    try {
+
+        const userId = req.user.id;
+        const { question } = req.body;
+
+        if (!question || typeof question !== "string") {
+            res.status(400).json({
+                message: "Question is required"
+            })
+            return
+        }
+
+        const codeContext = userCodeContext[userId as string];
+
+        if (!codeContext) {
+            res.status(400).json({
+                message: "No Code Context found. Please Upload your code first"
+            })
+        }
+
+        const prompt = `
+The user previously shared the following code:
+---
+${codeContext}
+---
+
+Now the user is asking this question:
+"${question}"
+
+Respond based on the provided code. Be specific and technical.
+Format your answer using Markdown, with examples and explanations where appropriate.
+    `;
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+        });
+
+        res.status(200).json({
+            answer: response.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated",
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
 }

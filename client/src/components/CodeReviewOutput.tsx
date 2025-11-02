@@ -17,7 +17,7 @@ interface CodeReviewProps {
 
 const CodeReviewOutput = ({ review }: CodeReviewProps) => {
     return (
-        <div className="w-full bg-[#0d0d0f] border border-[#1e1e20] rounded-2xl shadow-2xl p-6 md:p-8 text-gray-100 mt-6 transition-all duration-300 hover:shadow-blue-900/30">
+        <div className="w-full bg-[#0d0d0f] border border-[#1e1e20] rounded-2xl shadow-2xl p-6 md:p-8 text-gray-100 transition-all duration-300 hover:shadow-blue-900/30">
             {/* Header */}
             <div className="flex items-center gap-2 mb-4 md:mb-6 border-b border-gray-800 pb-3 md:pb-4">
                 <FileText className="text-blue-500" size={22} />
@@ -56,9 +56,9 @@ const CodeReviewOutput = ({ review }: CodeReviewProps) => {
                                     style={dracula}
                                     customStyle={{
                                         borderRadius: 12,
-                                        fontSize: "0.8rem",
+                                        fontSize: "0.9rem",
                                         backgroundColor: "#1a1a1d",
-                                        padding: "0.8rem",
+                                        padding: "0.9rem",
                                         border: "1px solid #2b2b2e",
                                         overflowX: "auto",
                                     }}
