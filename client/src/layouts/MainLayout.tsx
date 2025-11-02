@@ -104,49 +104,7 @@ const MainLayout = () => {
                     <div className="w-full bg-zinc-900 rounded-2xl p-4 shadow-sm">
                         <h2 className="text-lg font-semibold mb-3">Suggested for you</h2>
                         <div className="space-y-5">
-                            {users.map((user) => (
-                                <div key={user._id} className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={user.profilePic || "/default-avatar.png"}
-                                            alt={user.username}
-                                            className="w-10 h-10 rounded-full object-cover"
-                                        />
-                                        <div>
-                                            <p className="font-medium text-sm">{user.fullName}</p>
-                                            <p className="text-xs text-gray-500">@{user.username}</p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => handleFollow(user._id)}
-                                        className="flex items-center gap-1 bg-fuchsia-600 text-white px-3 py-1 rounded-md font-medium text-sm hover:bg-fuchsia-700 transition duration-300 cursor-pointer"
-                                    >
-                                        <UserPlus size={14} /> Follow
-                                    </button>
-                                </div>
-                            ))}
-                            {users.map((user) => (
-                                <div key={user._id} className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={user.profilePic || "/default-avatar.png"}
-                                            alt={user.username}
-                                            className="w-10 h-10 rounded-full object-cover"
-                                        />
-                                        <div>
-                                            <p className="font-medium text-sm">{user.fullName}</p>
-                                            <p className="text-xs text-gray-500">@{user.username}</p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => handleFollow(user._id)}
-                                        className="flex items-center gap-1 bg-fuchsia-600 text-white px-3 py-1 rounded-md font-medium text-sm hover:bg-fuchsia-700 transition duration-300 cursor-pointer"
-                                    >
-                                        <UserPlus size={14} /> Follow
-                                    </button>
-                                </div>
-                            ))}
-                            {users.map((user) => (
+                            {users.slice(0, 5).map((user) => (
                                 <div key={user._id} className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <img
