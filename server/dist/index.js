@@ -24,9 +24,18 @@ const comment_route_1 = __importDefault(require("./routes/comment.route"));
 const project_route_1 = __importDefault(require("./routes/project.route"));
 const explore_route_1 = __importDefault(require("./routes/explore.route"));
 const ai_route_1 = __importDefault(require("./routes/ai.route"));
+const http_1 = require("http");
+const socket_io_1 = require("socket.io");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const allowedUrl = [process.env.FRONTEND_URL, "http://localhost:5173"];
+const server = (0, http_1.createServer)(app);
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: allowedUrl,
+        credentials: true
+    }
+});
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
@@ -42,10 +51,34 @@ app.use('/api/comment', comment_route_1.default);
 app.use('/api/project', project_route_1.default);
 app.use('/api/explore', explore_route_1.default);
 app.use('/api/ai', ai_route_1.default);
+const users = new Map();
+io.on("connection", (socket) => {
+    console.log("A user is connected: ", socket.id);
+    socket.on("register", (userId) => {
+        users.set(userId, socket.id);
+    });
+    socket.on("private-chat", ({ senderId, receiverId, message }) => {
+        const targetedUser = users.get(receiverId);
+        if (targetedUser) {
+            io.to(targetedUser).emit("private-chat", { senderId, message });
+        }
+        else {
+            console.log("User is offline");
+        }
+        // socket.emit("private-chat", { receiverId, message })
+    });
+    socket.on("disconnect", () => {
+        console.log("User disconnected: ", socket.id);
+        for (const [userId, socketId] of users.entries()) {
+            if (socketId === socket.id)
+                users.delete(userId);
+        }
+    });
+});
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, dbConnection_1.default)();
-        app.listen(process.env.PORT, () => {
+        server.listen(process.env.PORT, () => {
             console.log(`Server running on ${process.env.PORT}`);
         });
     });
