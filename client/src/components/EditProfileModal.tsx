@@ -1,4 +1,4 @@
-import { Edit, X, Plus } from "lucide-react";
+import { Edit, X, Plus, Loader2 } from "lucide-react";
 import { createPortal } from "react-dom";
 import useUserStore from "../stores/userStore";
 import { useRef, useState } from "react";
@@ -34,6 +34,8 @@ const EditProfileModal = ({ setModal }: modalProp) => {
     const [profilePreview, setProfilePreview] = useState<string | null>(user?.profilePic || null);
     const [profilePic, setProfilePic] = useState<string | null>(user?.profilePic || null);
 
+    const [uploading, setUploading] = useState(false);
+
 
     const bannerImageRef = useRef<HTMLInputElement>(null);
     const profilePicRef = useRef<HTMLInputElement>(null);
@@ -49,6 +51,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
         formData.append("upload_preset", "DevSphere");
         formData.append("folder", "uploads");
 
+        setUploading(true)
         try {
             const res = await fetch("https://api.cloudinary.com/v1_1/dp7qerjic/image/upload", {
                 method: "POST",
@@ -58,7 +61,9 @@ const EditProfileModal = ({ setModal }: modalProp) => {
             return data.secure_url || null;
         } catch (error) {
             console.error("Cloudinary upload error:", error);
-            return null;
+            return null
+        } finally {
+            setUploading(false)
         }
     };
 
@@ -70,7 +75,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
             setBannerPreview(previewURL); // show preview immediately
 
             const uploadedUrl = await uploadToCloudinary(file);
-            console.log(uploadToCloudinary)
+            // console.log(uploadToCloudinary)
             if (uploadedUrl) setBannerImage(uploadedUrl);
         }
     };
@@ -82,7 +87,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
             setProfilePreview(previewURL);
 
             const uploadedUrl = await uploadToCloudinary(file);
-            console.log(uploadToCloudinary)
+            // console.log(uploadToCloudinary)
             if (uploadedUrl) setProfilePic(uploadedUrl);
         }
     };
@@ -133,12 +138,14 @@ const EditProfileModal = ({ setModal }: modalProp) => {
                     </div>
                     <button
                         onClick={handleSubmit}
-                        className={`px - 4 py - 1 rounded - full font - medium transition ${loading
+                        className={`px-4 py-1 rounded-full font-medium transition flex items-center justify-between gap-2 ${loading
                             ? "bg-zinc-700 text-gray-300 cursor-not-allowed"
                             : "bg-white text-black hover:bg-gray-200"
                             }`}
-                    >
-                        {loading ? "Saving..." : "Save"}
+                    >   
+                        {(uploading || loading) && <Loader2 className="animate-spin mr-2" size={16} />}
+                        {uploading ? "Uploading..." : loading ? "Saving..." : "Save"}
+
                     </button>
                 </div>
 

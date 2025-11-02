@@ -63,7 +63,7 @@ const MainLayout = () => {
                 </div>
 
                 {/* Right Sidebar */}
-                <div className="hidden md:flex flex-col justify-start items-start p-6 pt-8 w-[30%] h-screen border-l  border-zinc-600 gap-5 sticky top-0">
+                <div className="hidden md:flex flex-col justify-start items-start p-6 pt-8 w-[30%] min-h-screen border-l  border-zinc-600 gap-5 sticky top-0">
                     <div className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 flex flex-col gap-4">
                         {/* Profile */}
                         <div className="flex flex-col items-center gap-2 mb-2">
@@ -104,6 +104,48 @@ const MainLayout = () => {
                     <div className="w-full bg-zinc-900 rounded-2xl p-4 shadow-sm">
                         <h2 className="text-lg font-semibold mb-3">Suggested for you</h2>
                         <div className="space-y-5">
+                            {users.map((user) => (
+                                <div key={user._id} className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <img
+                                            src={user.profilePic || "/default-avatar.png"}
+                                            alt={user.username}
+                                            className="w-10 h-10 rounded-full object-cover"
+                                        />
+                                        <div>
+                                            <p className="font-medium text-sm">{user.fullName}</p>
+                                            <p className="text-xs text-gray-500">@{user.username}</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => handleFollow(user._id)}
+                                        className="flex items-center gap-1 bg-fuchsia-600 text-white px-3 py-1 rounded-md font-medium text-sm hover:bg-fuchsia-700 transition duration-300 cursor-pointer"
+                                    >
+                                        <UserPlus size={14} /> Follow
+                                    </button>
+                                </div>
+                            ))}
+                            {users.map((user) => (
+                                <div key={user._id} className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <img
+                                            src={user.profilePic || "/default-avatar.png"}
+                                            alt={user.username}
+                                            className="w-10 h-10 rounded-full object-cover"
+                                        />
+                                        <div>
+                                            <p className="font-medium text-sm">{user.fullName}</p>
+                                            <p className="text-xs text-gray-500">@{user.username}</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => handleFollow(user._id)}
+                                        className="flex items-center gap-1 bg-fuchsia-600 text-white px-3 py-1 rounded-md font-medium text-sm hover:bg-fuchsia-700 transition duration-300 cursor-pointer"
+                                    >
+                                        <UserPlus size={14} /> Follow
+                                    </button>
+                                </div>
+                            ))}
                             {users.map((user) => (
                                 <div key={user._id} className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
