@@ -9,9 +9,9 @@ userRouter.get('/following', userMiddleware, getUserFollowing);
 
 userRouter.get('/suggested-user', userMiddleware, getSuggestedUser)
 
-userRouter.get('/:id', userMiddleware, getUser);
+userRouter.put("/update", userMiddleware, updateUser);
 
-userRouter.put("/:id", userMiddleware, updateUser);
+userRouter.get('/:id', userMiddleware, getUser);
 
 userRouter.put('/follow/:id', userMiddleware, followUser);
 

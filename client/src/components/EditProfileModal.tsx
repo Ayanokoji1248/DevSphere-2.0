@@ -70,6 +70,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
             setBannerPreview(previewURL); // show preview immediately
 
             const uploadedUrl = await uploadToCloudinary(file);
+            console.log(uploadToCloudinary)
             if (uploadedUrl) setBannerImage(uploadedUrl);
         }
     };
@@ -81,6 +82,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
             setProfilePreview(previewURL);
 
             const uploadedUrl = await uploadToCloudinary(file);
+            console.log(uploadToCloudinary)
             if (uploadedUrl) setProfilePic(uploadedUrl);
         }
     };
@@ -92,7 +94,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
     const handleSubmit = async () => {
         setLoading(true)
         try {
-            const response = await axios.put(`${BACKEND_URL}/user/${user?._id}`, {
+            const response = await axios.put(`${BACKEND_URL}/user/update`, {
                 fullName,
                 username,
                 bannerImage,
@@ -103,7 +105,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
                 address,
                 skills
             }, { withCredentials: true });
-
+            console.log(response.data)
             setUser(response.data.user)
             updateUserProfilePic(user?._id as string, profilePic as string)
         } catch (error) {
@@ -131,7 +133,7 @@ const EditProfileModal = ({ setModal }: modalProp) => {
                     </div>
                     <button
                         onClick={handleSubmit}
-                        className={`px-4 py-1 rounded-full font-medium transition ${loading
+                        className={`px - 4 py - 1 rounded - full font - medium transition ${loading
                             ? "bg-zinc-700 text-gray-300 cursor-not-allowed"
                             : "bg-white text-black hover:bg-gray-200"
                             }`}
