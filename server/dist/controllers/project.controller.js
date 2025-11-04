@@ -82,7 +82,7 @@ const getProject = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
             return;
         }
-        const project = yield project_model_1.default.findOne({ user: userId, _id: projectId }).populate("user", "_id username fullName profilePic");
+        const project = yield project_model_1.default.findOne({ _id: projectId }).populate("user", "_id username fullName profilePic");
         if (!project) {
             res.status(404).json({
                 message: "Project Not Found"

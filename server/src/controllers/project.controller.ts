@@ -80,7 +80,7 @@ export const getProject = async (req: Request, res: Response) => {
             return
         }
 
-        const project = await Project.findOne({ user: userId, _id: projectId }).populate("user", "_id username fullName profilePic");
+        const project = await Project.findOne({ _id: projectId }).populate("user", "_id username fullName profilePic");
 
         if (!project) {
             res.status(404).json({
