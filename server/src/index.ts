@@ -12,6 +12,7 @@ import exploreRouter from "./routes/explore.route";
 import aiRouter from "./routes/ai.route";
 import { createServer } from "http"
 import { Server } from "socket.io";
+import { logsential } from "@axel12/log-sential-agent";
 dotenv.config();
 const app = express();
 
@@ -25,6 +26,13 @@ const io = new Server(server, {
     }
 })
 
+// this should be in .env file
+// this is will only work in local rn havent add to env in render
+app.use(logsential({
+    projectId: process.env.PROJECT_ID!,
+    apiKey: process.env.API_KEY!,
+    collectorUrl: process.env.COLLECTOR_URL!
+}))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParse())

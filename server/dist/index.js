@@ -26,6 +26,7 @@ const explore_route_1 = __importDefault(require("./routes/explore.route"));
 const ai_route_1 = __importDefault(require("./routes/ai.route"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
+const log_sential_agent_1 = require("@axel12/log-sential-agent");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const allowedUrl = [process.env.FRONTEND_URL, "http://localhost:5173"];
@@ -36,6 +37,12 @@ const io = new socket_io_1.Server(server, {
         credentials: true
     }
 });
+// this should be in .env file
+app.use((0, log_sential_agent_1.logsential)({
+    projectId: "f292e39a-7730-4f4a-89df-1ff24ac90d8d",
+    apiKey: "240adf340b3f0b68d730ffd3c1339463",
+    collectorUrl: "http://localhost:4000"
+}));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
